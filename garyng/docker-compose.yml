@@ -7,9 +7,6 @@ services:
     volumes:
         - ../:/qmk_firmware
         - ./config:/root/.config/qmk
-        # - ./build:/qmk_firmware/.build
-        # - ./keymaps/garyng:/qmk_firmware/keyboards/converter/usb_usb/keymaps/garyng
-        # - ./.vscode/c_cpp_properties.json:/qmk_firmware/.vscode/c_cpp_properties.json
     # Uncomment the next four lines if you will use a ptrace-based debugger like C++, Go, and Rust.
     # cap_add:
     #   - SYS_PTRACE

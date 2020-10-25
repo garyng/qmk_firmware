@@ -16,7 +16,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include QMK_KEYBOARD_H
-#include <stdio.h> 
+#include <stdio.h>
 #include <stdlib.h>
 #include <print.h>
 
@@ -145,7 +145,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     uint16_t kc_wrapping = layers_keys_maps[current_layer];
 
 
-    if (KC_A <= keycode 
+    if (KC_A <= keycode
         && keycode <= KC_EXSEL
         && keycode != kc_wrapping) {
         if (record->event.pressed) {
@@ -159,7 +159,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 unregister_code(kc_wrapping);
             }
         }
-        
+
         dprintf("layer %d | tracker: %d | keycode: 0x%02X\n", current_layer, fk_trackers[current_layer], keycode);
         return false;
     }
