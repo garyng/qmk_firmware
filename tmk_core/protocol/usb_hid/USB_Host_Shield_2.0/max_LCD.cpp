@@ -37,7 +37,7 @@ e-mail   :  support@circuitsathome.com
                             sendbyte(a);    \
                         }
 
-static byte lcdPins; //copy of LCD pins
+static uint8_t lcdPins; //copy of LCD pins
 
 Max_LCD::Max_LCD(USB *pusb) : pUsb(pusb) {
         lcdPins = 0;
@@ -51,7 +51,7 @@ void Max_LCD::init() {
         begin(16, 1);
 }
 
-void Max_LCD::begin(uint8_t cols, uint8_t lines, uint8_t dotsize) {
+void Max_LCD::begin(uint8_t cols __attribute__((unused)), uint8_t lines, uint8_t dotsize) {
         if(lines > 1) {
                 _displayfunction |= LCD_2LINE;
         }

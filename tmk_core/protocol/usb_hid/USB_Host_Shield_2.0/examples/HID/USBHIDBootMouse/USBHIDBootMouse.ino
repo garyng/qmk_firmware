@@ -4,8 +4,8 @@
 // Satisfy the IDE, which needs to see the include statment in the ino too.
 #ifdef dobogusinclude
 #include <spi4teensy3.h>
-#include <SPI.h>
 #endif
+#include <SPI.h>
 
 class MouseRptParser : public MouseReportParser
 {
@@ -52,9 +52,7 @@ void MouseRptParser::OnMiddleButtonDown	(MOUSEINFO *mi)
 
 USB     Usb;
 USBHub     Hub(&Usb);
-HIDBoot<HID_PROTOCOL_MOUSE>    HidMouse(&Usb);
-
-uint32_t next_time;
+HIDBoot<USB_HID_PROTOCOL_MOUSE>    HidMouse(&Usb);
 
 MouseRptParser                               Prs;
 
@@ -71,9 +69,7 @@ void setup()
 
     delay( 200 );
 
-    next_time = millis() + 5000;
-
-    HidMouse.SetReportParser(0,(HIDReportParser*)&Prs);
+    HidMouse.SetReportParser(0, &Prs);
 }
 
 void loop()

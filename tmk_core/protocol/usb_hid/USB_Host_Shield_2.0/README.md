@@ -2,23 +2,24 @@
 
 The code is released under the GNU General Public License.
 __________
+[![Build Status](https://travis-ci.org/felis/USB_Host_Shield_2.0.svg?branch=master)](https://travis-ci.org/felis/USB_Host_Shield_2.0)
 
 # Summary
 This is Revision 2.0 of MAX3421E-based USB Host Shield Library for AVR's.
 
-Project main web site is: <http://www.circuitsathome.com>.
+Project main web site is: <https://chome.nerpa.tech/arduino_usb_host_shield_projects/>.
 
 Some information can also be found at: <http://blog.tkjelectronics.dk/>.
 
-The shield can be purchased at the main site: <https://www.circuitsathome.com/arduino_usb_host_shield_projects/> or from [TKJ Electronics](http://tkjelectronics.com/): <http://shop.tkjelectronics.dk/product_info.php?products_id=43>.
+The shield can be purchased from [TKJ Electronics](http://tkjelectronics.com/): <http://shop.tkjelectronics.dk/product_info.php?products_id=43>.
 
 ![USB Host Shield](http://shop.tkjelectronics.dk/images/USB_Host_Shield1.jpg)
 
-For more information about the hardware see the [Hardware Manual](http://www.circuitsathome.com/usb-host-shield-hardware-manual).
+For more information about the hardware see the [Hardware Manual](https://chome.nerpa.tech/usb-host-shield-hardware-manual/).
 
 # Developed By
 
-* __Oleg Mazurov, Circuits@Home__ - <mazurov@circuitsathome.com>
+* __Oleg Mazurov  - <mazurov@gmail.com>
 * __Alexei Glushchenko, Circuits@Home__ - <alex-gl@mail.ru>
     * Developers of the USB Core, HID, FTDI, ADK, ACM, and PL2303 libraries
 * __Kristian Lauszus, TKJ Electronics__ - <kristianl@tkjelectronics.com>
@@ -27,12 +28,9 @@ For more information about the hardware see the [Hardware Manual](http://www.cir
     * Major contributor to mass storage code
 * __guruthree__
     * [Xbox ONE](#xbox-one-library) controller support
+* __Yuuichi Akagawa__ - [@YuuichiAkagawa](https://twitter.com/yuuichiakagawa)
+    * Developer of the [MIDI](#midi-library) library
 
-# Donate
-
-Help yourself by helping us support you! Many thousands of hours have been spent developing the USB Host Shield library. Since you find it useful, please consider donating via the button below. Donations will allow us to support you by ensuring hardware that you have can be acquired in order to add support for your microcontroller board.
-
-<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=donate@circuitsathome.com&amp;lc=US&amp;item_name=Donate%20to%20the%20USB%20Host%20Library%20project&amp;no_note=0&amp;currency_code=USD&amp;bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHostedGuest"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" alt="PayPal - The safer, easier way to pay online!" /></a>
 
 # Table of Contents
 
@@ -54,6 +52,8 @@ Help yourself by helping us support you! Many thousands of hours have been spent
         * [Xbox ONE Library](#xbox-one-library)
     * [Wii library](#wii-library)
     * [PS Buzz Library](#ps-buzz-library)
+    * [HID Libraries](#hid-libraries)
+    * [MIDI Library](#midi-library)
 * [Interface modifications](#interface-modifications)
 * [FAQ](#faq)
 
@@ -90,7 +90,7 @@ For more information visit the following sites: <http://arduino.cc/en/Guide/Libr
 
 ### Documentation
 
-Documentation for the library can be found at the following link: <http://felis.github.com/USB_Host_Shield_2.0/>.
+Documentation for the library can be found at the following link: <https://felis.github.io/USB_Host_Shield_2.0/>.
 
 ### Enable debugging
 
@@ -106,15 +106,25 @@ Currently the following boards are supported by the library:
 
 * All official Arduino AVR boards (Uno, Duemilanove, Mega, Mega 2560, Mega ADK, Leonardo etc.)
 * Arduino Due, Intel Galileo, Intel Galileo 2, and Intel Edison
-    * Note that the Intel Galileo uses pin 2 and 3 as INT and SS pin respectively by default, so some modifications to the shield are needed. See the "Interface modifications" section in the [hardware manual](https://www.circuitsathome.com/usb-host-shield-hardware-manual) for more information.
-* Teensy (Teensy++ 1.0, Teensy 2.0, Teensy++ 2.0, and Teensy 3.x)
+    * Note that the Intel Galileo uses pin 2 and 3 as INT and SS pin respectively by default, so some modifications to the shield are needed. See the "Interface modifications" section in the [hardware manual](https://chome.nerpa.tech/usb-host-shield-hardware-manual) for more information.
+    * Note native USB host is not supported on any of these platforms. You will have to use the shield for now.
+* Teensy (Teensy++ 1.0, Teensy 2.0, Teensy++ 2.0, Teensy 3.x, and Teensy LC)
     * Note if you are using the Teensy 3.x you should download this SPI library as well: <https://github.com/xxxajk/spi4teensy3>. You should then add ```#include <spi4teensy3.h>``` to your .ino file.
 * Balanduino
 * Sanguino
 * Black Widdow
 * RedBearLab nRF51822
 * Digilent chipKIT
-    * Please see: <http://www.circuitsathome.com/mcu/usb/running-usb-host-code-on-digilent-chipkit-board>.
+    * Please see: <https://chome.nerpa.tech/mcu/usb/running-usb-host-code-on-digilent-chipkit-board>.
+* STM32F4
+    * Currently the [NUCLEO-F446RE](http://www.st.com/web/catalog/tools/FM116/SC959/SS1532/LN1847/PF262063) is supported featuring the STM32F446. Take a look at the following example code: <https://github.com/Lauszus/Nucleo_F446RE_USBHost>.
+* ESP8266 is supported using the [ESP8266 Arduino core](https://github.com/esp8266/Arduino)
+    * Note it uses pin 15 and 5 for SS and INT respectively
+    * Also please be aware that:
+      * GPIO16 is **NOT** usable, as it will be used for some other purposes. For example, reset the SoC itself from sleep mode.
+      * GPIO6 to 11 is also **NOT** usable, as they are used to connect SPI flash chip and it is used for storing the executable binary content.
+* ESP32 is supported using the [arduino-esp32](https://github.com/espressif/arduino-esp32/)
+    * GPIO5 : SS, GPIO17 : INT, GPIO18 : SCK, GPIO19 : MISO, GPIO23 : MOSI
 
 The following boards need to be activated manually in [settings.h](settings.h):
 
@@ -154,7 +164,7 @@ Take a look at the [SPP.ino](examples/Bluetooth/SPP/SPP.ino) example for more in
 
 More information can be found at these blog posts:
 
-* <http://www.circuitsathome.com/mcu/bluetooth-rfcommspp-service-support-for-usb-host-2-0-library-released>
+* <http://chome.nerpa.tech/mcu/bluetooth-rfcommspp-service-support-for-usb-host-2-0-library-released>
 * <http://blog.tkjelectronics.dk/2012/07/rfcommspp-library-for-arduino/>
 
 To implement the SPP protocol I used a Bluetooth sniffing tool called [PacketLogger](http://www.tkjelectronics.com/uploads/PacketLogger.zip) developed by Apple.
@@ -168,13 +178,15 @@ The [PS4BT.ino](examples/Bluetooth/PS4BT/PS4BT.ino) and [PS4USB.ino](examples/PS
 
 Before you can use the PS4 controller via Bluetooth you will need to pair with it.
 
-Simply create the PS4BT instance like so: ```PS4BT PS4(&Btd, PAIR);``` and then hold down the Share button and then hold down the PS without releasing the Share button. The PS4 controller will then start to blink rapidly indicating that it is in paring mode.
+Simply create the PS4BT instance like so: ```PS4BT PS4(&Btd, PAIR);``` and then hold down the Share button and then hold down the PS without releasing the Share button. The PS4 controller will then start to blink rapidly indicating that it is in pairing mode.
 
 It should then automatically pair the dongle with your controller. This only have to be done once.
 
 For information see the following blog post: <http://blog.tkjelectronics.dk/2014/01/ps4-controller-now-supported-by-the-usb-host-library/>.
 
 Also check out this excellent Wiki by Frank Zhao about the PS4 controller: <http://eleccelerator.com/wiki/index.php?title=DualShock_4> and this Linux driver: <https://github.com/chrippa/ds4drv>.
+
+Several guides on how to use the PS4 library has been written by Dr. James E. Barger and are available at the following link: <https://sites.google.com/view/vbatc-engineeringtechnology2/control-system-tutorials/ps4-tutorials>.
 
 ### PS3 Library
 
@@ -191,13 +203,13 @@ For more information about the PS3 protocol see the official wiki: <https://gith
 Also take a look at the blog posts:
 
 * <http://blog.tkjelectronics.dk/2012/01/ps3-controller-bt-library-for-arduino/>
-* <http://www.circuitsathome.com/mcu/sony-ps3-controller-support-added-to-usb-host-library>
-* <http://www.circuitsathome.com/mcu/arduino/interfacing-ps3-controllers-via-usb>
+* <http://chome.nerpa.tech/mcu/sony-ps3-controller-support-added-to-usb-host-library>
+* <http://chome.nerpa.tech/mcu/arduino/interfacing-ps3-controllers-via-usb>
 
 A special thanks go to the following people:
 
-1. _Richard Ibbotson_ who made this excellent guide: <https://www.circuitsathome.com/mcu/ps3-and-wiimote-game-controllers-on-the-arduino-host-shield-part-1/>
-2. _Tomoyuki Tanaka_ for releasing his code for the Arduino USB Host shield connected to the wiimote: <http://www.circuitsathome.com/mcu/rc-car-controlled-by-wii-remote-on-arduino>
+1. _Richard Ibbotson_ who made this excellent guide: <http://chome.nerpa.tech/mcu/ps3-and-wiimote-game-controllers-on-the-arduino-host-shield-part>
+2. _Tomoyuki Tanaka_ for releasing his code for the Arduino USB Host shield connected to the wiimote: <http://chome.nerpa.tech/mcu/rc-car-controlled-by-wii-remote-on-arduino>
 
 Also a big thanks all the people behind these sites about the Motion controller:
 
@@ -216,10 +228,10 @@ The [XBOXOLD](XBOXOLD.cpp) class implements support for the original Xbox contro
 
 All the information are from the following sites:
 
-* <https://github.com/torvalds/linux/blob/master/Documentation/input/devices/xpad.rst>
+* <https://github.com/torvalds/linux/blob/master/Documentation/input/xpad.txt>
 * <https://github.com/torvalds/linux/blob/master/drivers/input/joystick/xpad.c>
 * <http://euc.jp/periphs/xbox-controller.ja.html>
-* <https://github.com/Grumbel/xboxdrv/blob/stable/PROTOCOL#L15>
+* <https://github.com/Grumbel/xboxdrv/blob/master/PROTOCOL#L15>
 
 #### Xbox 360 Library
 
@@ -233,7 +245,7 @@ Examples code can be found in the [examples directory](examples/Xbox).
 
 Also see the following blog posts:
 
-* <http://www.circuitsathome.com/mcu/xbox360-controller-support-added-to-usb-host-shield-2-0-library>
+* <http://chome.nerpa.tech/mcu/xbox360-controller-support-added-to-usb-host-shield-2-0-library>
 * <http://blog.tkjelectronics.dk/2012/07/xbox-360-controller-support-added-to-the-usb-host-library/>
 * <http://blog.tkjelectronics.dk/2012/12/xbox-360-receiver-added-to-the-usb-host-library/>
 
@@ -241,7 +253,7 @@ All the information regarding the Xbox 360 controller protocol are form these si
 
 * <http://tattiebogle.net/index.php/ProjectRoot/Xbox360Controller/UsbInfo>
 * <http://tattiebogle.net/index.php/ProjectRoot/Xbox360Controller/WirelessUsbInfo>
-* <https://github.com/Grumbel/xboxdrv/blob/stable/PROTOCOL>
+* <https://github.com/Grumbel/xboxdrv/blob/master/PROTOCOL>
 
 #### Xbox ONE Library
 
@@ -303,6 +315,20 @@ More information about the controller can be found at the following sites:
 * http://www.developerfusion.com/article/84338/making-usb-c-friendly/
 * https://github.com/torvalds/linux/blob/master/drivers/hid/hid-sony.c
 
+### HID Libraries
+
+HID devices are also supported by the library. However these require you to write your own driver. A few example are provided in the [examples/HID](examples/HID) directory. Including an example for the [SteelSeries SRW-S1 Steering Wheel](examples/HID/SRWS1/SRWS1.ino).
+
+### [MIDI Library](usbh_midi.cpp)
+
+The library support MIDI devices.
+You can convert USB MIDI keyboard to legacy serial MIDI.
+
+* [USB_MIDI_converter.ino](examples/USBH_MIDI/USB_MIDI_converter/USB_MIDI_converter.ino)
+* [USB_MIDI_converter_multi.ino](examples/USBH_MIDI/USB_MIDI_converter_multi/USB_MIDI_converter_multi.ino)
+
+For information see the following page: <http://yuuichiakagawa.github.io/USBH_MIDI/>.
+
 # Interface modifications
 
 The shield is using SPI for communicating with the MAX3421E USB host controller. It uses the SCK, MISO and MOSI pins via the ICSP on your board.
@@ -323,7 +349,7 @@ For instance if you have rerouted SS to pin 7 it should read:
 typedef MAX3421e<P7, P9> MAX3421E;
 ```
 
-See the "Interface modifications" section in the [hardware manual](https://www.circuitsathome.com/usb-host-shield-hardware-manual) for more information.
+See the "Interface modifications" section in the [hardware manual](https://chome.nerpa.tech/usb-host-shield-hardware-manual) for more information.
 
 # FAQ
 

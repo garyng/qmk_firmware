@@ -4,8 +4,8 @@
 // Satisfy the IDE, which needs to see the include statment in the ino too.
 #ifdef dobogusinclude
 #include <spi4teensy3.h>
-#include <SPI.h>
 #endif
+#include <SPI.h>
 
 class KbdRptParser : public KeyboardReportParser
 {
@@ -98,9 +98,7 @@ void KbdRptParser::OnKeyPressed(uint8_t key)
 
 USB     Usb;
 //USBHub     Hub(&Usb);
-HIDBoot<HID_PROTOCOL_KEYBOARD>    HidKeyboard(&Usb);
-
-uint32_t next_time;
+HIDBoot<USB_HID_PROTOCOL_KEYBOARD>    HidKeyboard(&Usb);
 
 KbdRptParser Prs;
 
@@ -117,9 +115,7 @@ void setup()
 
   delay( 200 );
 
-  next_time = millis() + 5000;
-
-  HidKeyboard.SetReportParser(0, (HIDReportParser*)&Prs);
+  HidKeyboard.SetReportParser(0, &Prs);
 }
 
 void loop()

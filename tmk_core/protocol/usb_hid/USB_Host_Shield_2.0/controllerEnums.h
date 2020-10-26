@@ -18,6 +18,10 @@
 #ifndef _controllerenums_h
 #define _controllerenums_h
 
+#if defined(ESP32)
+#undef PS
+#endif
+
 /**
  * This header file is used to store different enums for the controllers,
  * This is necessary so all the different libraries can be used at once.
@@ -26,11 +30,12 @@
 /** Enum used to turn on the LEDs on the different controllers. */
 enum LEDEnum {
         OFF = 0,
+#ifndef RBL_NRF51822
         LED1 = 1,
         LED2 = 2,
         LED3 = 3,
         LED4 = 4,
-
+#endif
         LED5 = 5,
         LED6 = 6,
         LED7 = 7,
@@ -55,6 +60,7 @@ enum ColorsEnum {
         /** r = 0, g = 255, b = 255 */
         Lightblue = 0xFFFF,
         /** r = 255, g = 0, b = 255 */
+        Purple = 0xFF00FF,
         Purble = 0xFF00FF,
 
         /** r = 255, g = 255, b = 255 */

@@ -18,10 +18,10 @@ e-mail   :  support@circuitsathome.com
 #if !defined(__HIDUNIVERSAL_H__)
 #define __HIDUNIVERSAL_H__
 
-#include "hid.h"
+#include "usbhid.h"
 //#include "hidescriptorparser.h"
 
-class HIDUniversal : public HID {
+class HIDUniversal : public USBHID {
 
         struct ReportParser {
                 uint8_t rptId;
@@ -40,7 +40,7 @@ class HIDUniversal : public HID {
                         uint8_t bmAltSet : 3;
                         uint8_t bmProtocol : 2;
                 };
-                uint8_t epIndex[maxEpPerInterface];
+                uint8_t epIndex[maxEpPerInterface + 1]; // We need to make room for the control endpoint as well
         };
 
         uint8_t bConfNum; // configuration number
@@ -75,7 +75,7 @@ protected:
                 return 0;
         };
 
-        virtual void ParseHIDData(HID *hid, bool is_rpt_id, uint8_t len, uint8_t *buf) {
+        virtual void ParseHIDData(USBHID *hid __attribute__((unused)), bool is_rpt_id __attribute__((unused)), uint8_t len __attribute__((unused)), uint8_t *buf __attribute__((unused))) {
                 return;
         };
 
