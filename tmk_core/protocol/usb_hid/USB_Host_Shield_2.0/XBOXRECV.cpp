@@ -29,7 +29,8 @@ bPollEnable(false) { // don't start polling before dongle is connected
         for(uint8_t i = 0; i < XBOX_MAX_ENDPOINTS; i++) {
                 epInfo[i].epAddr = 0;
                 epInfo[i].maxPktSize = (i) ? 0 : 8;
-                epInfo[i].epAttribs = 0;
+                epInfo[i].bmSndToggle = 0;
+                epInfo[i].bmRcvToggle = 0;
                 epInfo[i].bmNakPower = (i) ? USB_NAK_NOWAIT : USB_NAK_MAX_POWER;
         }
 
@@ -134,7 +135,7 @@ Fail:
         return rcode;
 };
 
-uint8_t XBOXRECV::Init(uint8_t parent, uint8_t port, bool lowspeed) {
+uint8_t XBOXRECV::Init(uint8_t parent __attribute__((unused)), uint8_t port __attribute__((unused)), bool lowspeed) {
         uint8_t rcode;
 
         AddressPool &addrPool = pUsb->GetAddressPool();
@@ -292,8 +293,8 @@ uint8_t XBOXRECV::Release() {
 uint8_t XBOXRECV::Poll() {
         if(!bPollEnable)
                 return 0;
-        if(!checkStatusTimer || ((millis() - checkStatusTimer) > 3000)) { // Run checkStatus every 3 seconds
-                checkStatusTimer = millis();
+        if(!checkStatusTimer || ((int32_t)((uint32_t)millis() - checkStatusTimer) > 3000)) { // Run checkStatus every 3 seconds
+                checkStatusTimer = (uint32_t)millis();
                 checkStatus();
         }
 
@@ -391,7 +392,7 @@ void XBOXRECV::readReport(uint8_t controller) {
         }
 }
 
-void XBOXRECV::printReport(uint8_t controller, uint8_t nBytes) { //Uncomment "#define PRINTREPORT" to print the report send by the Xbox 360 Controller
+void XBOXRECV::printReport(uint8_t controller __attribute__((unused)), uint8_t nBytes __attribute__((unused))) { //Uncomment "#define PRINTREPORT" to print the report send by the Xbox 360 Controller
 #ifdef PRINTREPORT
         if(readBuf == NULL)
                 return;
@@ -571,13 +572,13 @@ void XBOXRECV::onInit(uint8_t controller) {
         else {
                 LEDEnum led;
                 if(controller == 0)
-                        led = LED1;
+                        led = static_cast<LEDEnum>(LED1);
                 else if(controller == 1)
-                        led = LED2;
+                        led = static_cast<LEDEnum>(LED2);
                 else if(controller == 2)
-                        led = LED3;
+                        led = static_cast<LEDEnum>(LED3);
                 else
-                        led = LED4;
+                        led = static_cast<LEDEnum>(LED4);
                 setLedOn(led, controller);
         }
 }

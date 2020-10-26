@@ -12,8 +12,8 @@
 // Satisfy the IDE, which needs to see the include statment in the ino too.
 #ifdef dobogusinclude
 #include <spi4teensy3.h>
-#include <SPI.h>
 #endif
+#include <SPI.h>
 
 USB Usb;
 //USBHub Hub1(&Usb); // Some dongles have a hub inside
@@ -40,12 +40,12 @@ void setup() {
     while (1); // Halt
   }
 
-  bthid.SetReportParser(KEYBOARD_PARSER_ID, (HIDReportParser*)&keyboardPrs);
-  bthid.SetReportParser(MOUSE_PARSER_ID, (HIDReportParser*)&mousePrs);
+  bthid.SetReportParser(KEYBOARD_PARSER_ID, &keyboardPrs);
+  bthid.SetReportParser(MOUSE_PARSER_ID, &mousePrs);
 
   // If "Boot Protocol Mode" does not work, then try "Report Protocol Mode"
   // If that does not work either, then uncomment PRINTREPORT in BTHID.cpp to see the raw report
-  bthid.setProtocolMode(HID_BOOT_PROTOCOL); // Boot Protocol Mode
+  bthid.setProtocolMode(USB_HID_BOOT_PROTOCOL); // Boot Protocol Mode
   //bthid.setProtocolMode(HID_RPT_PROTOCOL); // Report Protocol Mode
 
   Serial.print(F("\r\nHID Bluetooth Library Started"));

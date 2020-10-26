@@ -1,11 +1,18 @@
 /* Copyright (C) 2011 Circuits At Home, LTD. All rights reserved.
 
-This software may be distributed and modified under the terms of the GNU
-General Public License version 2 (GPL2) as published by the Free Software
-Foundation and appearing in the file GPL2.TXT included in the packaging of
-this file. Please note that GPL2 Section 2[b] requires that all works based
-on this software must also be made publicly available under the terms of
-the GPL2 ("Copyleft").
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 Contact information
 -------------------
@@ -323,7 +330,7 @@ FailGetDevDescr:
  * @param lowspeed true if device is low speed
  * @return 0 for success
  */
-uint8_t BulkOnly::Init(uint8_t parent, uint8_t port, bool lowspeed) {
+uint8_t BulkOnly::Init(uint8_t parent __attribute__((unused)), uint8_t port __attribute__((unused)), bool lowspeed) {
         uint8_t rcode;
         uint8_t num_of_conf = epInfo[1].epAddr; // number of configurations
         epInfo[1].epAddr = 0;
@@ -540,7 +547,7 @@ Fail:
  * @param proto
  * @param pep
  */
-void BulkOnly::EndpointXtract(uint8_t conf, uint8_t iface, uint8_t alt, uint8_t proto, const USB_ENDPOINT_DESCRIPTOR * pep) {
+void BulkOnly::EndpointXtract(uint8_t conf, uint8_t iface, uint8_t alt, uint8_t proto __attribute__((unused)), const USB_ENDPOINT_DESCRIPTOR * pep) {
         ErrorMessage<uint8_t > (PSTR("Conf.Val"), conf);
         ErrorMessage<uint8_t > (PSTR("Iface Num"), iface);
         ErrorMessage<uint8_t > (PSTR("Alt.Set"), alt);
@@ -550,12 +557,13 @@ void BulkOnly::EndpointXtract(uint8_t conf, uint8_t iface, uint8_t alt, uint8_t 
         uint8_t index;
 
 #if 1
-        if((pep->bmAttributes & 0x02) == 2) {
+        if((pep->bmAttributes & bmUSB_TRANSFER_TYPE) == USB_TRANSFER_TYPE_BULK) {
                 index = ((pep->bEndpointAddress & 0x80) == 0x80) ? epDataInIndex : epDataOutIndex;
                 // Fill in the endpoint info structure
                 epInfo[index].epAddr = (pep->bEndpointAddress & 0x0F);
                 epInfo[index].maxPktSize = (uint8_t)pep->wMaxPacketSize;
-                epInfo[index].epAttribs = 0;
+                epInfo[index].bmSndToggle = 0;
+                epInfo[index].bmRcvToggle = 0;
 
                 bNumEP++;
 
@@ -563,10 +571,9 @@ void BulkOnly::EndpointXtract(uint8_t conf, uint8_t iface, uint8_t alt, uint8_t 
 
         }
 #else
-        if((pep->bmAttributes & 0x03) == 3 && (pep->bEndpointAddress & 0x80) == 0x80)
+        if((pep->bmAttributes & bmUSB_TRANSFER_TYPE) == USB_TRANSFER_TYPE_INTERRUPT && (pep->bEndpointAddress & 0x80) == 0x80)
                 index = epInterruptInIndex;
-        else
-                if((pep->bmAttributes & 0x02) == 2)
+        else if((pep->bmAttributes & bmUSB_TRANSFER_TYPE) == USB_TRANSFER_TYPE_BULK)
                 index = ((pep->bEndpointAddress & 0x80) == 0x80) ? epDataInIndex : epDataOutIndex;
         else
                 return;
@@ -574,7 +581,8 @@ void BulkOnly::EndpointXtract(uint8_t conf, uint8_t iface, uint8_t alt, uint8_t 
         // Fill in the endpoint info structure
         epInfo[index].epAddr = (pep->bEndpointAddress & 0x0F);
         epInfo[index].maxPktSize = (uint8_t)pep->wMaxPacketSize;
-        epInfo[index].epAttribs = 0;
+        epInfo[index].bmSndToggle = 0;
+        epInfo[index].bmRcvToggle = 0;
 
         bNumEP++;
 
@@ -657,7 +665,7 @@ void BulkOnly::CheckMedia() {
         }
         printf("\r\n");
 #endif
-        qNextPollTime = millis() + 2000;
+        qNextPollTime = (uint32_t)millis() + 2000;
 }
 
 /**
@@ -671,7 +679,7 @@ uint8_t BulkOnly::Poll() {
         if(!bPollEnable)
                 return 0;
 
-        if((long)(millis() - qNextPollTime) >= 0L) {
+        if((int32_t)((uint32_t)millis() - qNextPollTime) >= 0L) {
                 CheckMedia();
         }
         //rcode = 0;
@@ -754,7 +762,7 @@ uint8_t BulkOnly::ModeSense6(uint8_t lun, uint8_t pc, uint8_t page, uint8_t subp
         Notify(PSTR("\r\rModeSense\r\n"), 0x80);
         Notify(PSTR("------------\r\n"), 0x80);
 
-        CDB6_t cdb = CDB6_t(SCSI_CMD_TEST_UNIT_READY, lun, (uint32_t)((((pc << 6) | page) << 8) | subpage), len, 0);
+        CDB6_t cdb = CDB6_t(SCSI_CMD_MODE_SENSE_6, lun, (uint32_t)((((pc << 6) | page) << 8) | subpage), len, 0);
         return SCSITransaction6(&cdb, len, pbuf, (uint8_t)MASS_CMD_DIR_IN);
 }
 
@@ -850,7 +858,6 @@ uint8_t BulkOnly::ClearEpHalt(uint8_t index) {
         }
         epInfo[index].bmSndToggle = 0;
         epInfo[index].bmRcvToggle = 0;
-        // epAttribs = 0;
         return 0;
 }
 
@@ -890,8 +897,8 @@ void BulkOnly::ClearAllEP() {
         for(uint8_t i = 0; i < MASS_MAX_ENDPOINTS; i++) {
                 epInfo[i].epAddr = 0;
                 epInfo[i].maxPktSize = (i) ? 0 : 8;
-                epInfo[i].epAttribs = 0;
-
+                epInfo[i].bmSndToggle = 0;
+                epInfo[i].bmRcvToggle = 0;
                 epInfo[i].bmNakPower = USB_NAK_DEFAULT;
         }
 
@@ -1237,7 +1244,7 @@ void BulkOnly::PrintEndpointDescriptor(const USB_ENDPOINT_DESCRIPTOR * ep_ptr) {
 ////////////////////////////////////////////////////////////////////////////////
 
 /* We won't be needing this... */
-uint8_t BulkOnly::Read(uint8_t lun, uint32_t addr, uint16_t bsize, uint8_t blocks, USBReadParser * prs) {
+uint8_t BulkOnly::Read(uint8_t lun __attribute__((unused)), uint32_t addr __attribute__((unused)), uint16_t bsize __attribute__((unused)), uint8_t blocks __attribute__((unused)), USBReadParser * prs __attribute__((unused))) {
 #if MS_WANT_PARSER
         if(!LUNOk[lun]) return MASS_ERR_NO_MEDIA;
         Notify(PSTR("\r\nRead (With parser)\r\n"), 0x80);
