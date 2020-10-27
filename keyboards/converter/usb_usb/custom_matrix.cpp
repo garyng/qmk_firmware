@@ -70,38 +70,6 @@ static report_keyboard_t local_keyboard_report;
 
 static bool matrix_is_mod = false;
 
-/////////////////////////
-// From USBHIDMultimediaKbd.ino
-// Override HIDComposite to be able to select which interface we want to hook into
-class HIDSelector : public HIDComposite
-{
-public:
-    HIDSelector(USB *p) : HIDComposite(p) {};
-
-protected:
-    void ParseHIDData(USBHID *hid, uint8_t ep, bool is_rpt_id, uint8_t len, uint8_t *buf); // Called by the HIDComposite library
-    bool SelectInterface(uint8_t iface, uint8_t proto);
-};
-
-// Return true for the interface we want to hook into
-bool HIDSelector::SelectInterface(uint8_t iface, uint8_t proto)
-{
-  xprintf("iface %d, proto %d", iface, proto);
-  return true;
-}
-
-// Will be called for all HID data received from the USB interface
-void HIDSelector::ParseHIDData(USBHID *hid, uint8_t ep, bool is_rpt_id, uint8_t l en, uint8_t *buf) {
-  if (len && buf)  {
-    xprintf("ep: %d ", ep, is_rpt_id);
-    for (uint8_t i = 0; i < len; i++) {
-      xprintf("%02X ", buf[i]);
-    }
-    print("\n\r");
-  }
-}
-/////////////////////////
-
 /*
  * USB Host Shield HID keyboards
  * This supports two cascaded hubs and four keyboards
