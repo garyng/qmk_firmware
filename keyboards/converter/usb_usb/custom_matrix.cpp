@@ -30,6 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "util.h"
 #include "print.h"
 #include "debug.h"
+#include "HidGeneric.h"
 #include "timer.h"
 #include "matrix.h"
 #include "led.h"
@@ -75,7 +76,8 @@ static bool matrix_is_mod = false;
  * This supports two cascaded hubs and four keyboards
  */
 USB usb_host;
-HIDSelector    kbd1(&usb_host);
+HidGenericReportParser parser;
+HidGeneric    kbd1(&usb_host, &parser);
 // HIDBoot<USB_HID_PROTOCOL_KEYBOARD>    kbd1(&usb_host);
 // HIDBoot<USB_HID_PROTOCOL_KEYBOARD>    kbd2(&usb_host);
 // HIDBoot<USB_HID_PROTOCOL_KEYBOARD>    kbd3(&usb_host);
