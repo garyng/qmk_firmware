@@ -102,7 +102,12 @@ public:
         uint8_t SndRpt(uint16_t nbytes, uint8_t *dataptr);
 
         // Returns true if we should listen on an interface, false if not
-        virtual bool SelectInterface(uint8_t iface, uint8_t proto) = 0;
+        virtual bool SelectInterface(uint8_t iface, uint8_t proto)  {
+                if (proto != 0)
+                        return true;
+
+                return false;
+        }
 };
 
 #endif // __HIDCOMPOSITE_H__

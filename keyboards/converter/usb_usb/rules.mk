@@ -25,6 +25,6 @@ EXTRAKEY_ENABLE  = yes  # Audio control and System control
 USB_HID_ENABLE   = yes
 CUSTOM_MATRIX    = yes
 
-SRC = custom_matrix.cpp
+SRC += numpad34_parser.cpp custom_matrix.cpp hidcomposite.cpp
 
 DEFAULT_FOLDER = converter/usb_usb/hasu

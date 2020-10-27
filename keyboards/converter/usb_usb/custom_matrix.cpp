@@ -23,6 +23,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "usbhub.h"
 #include "usbhid.h"
 #include "hidboot.h"
+#include "hidcomposite.h"
+
 #include "parser.h"
 
 #include "keycode.h"
@@ -34,6 +36,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "led.h"
 #include "host.h"
 #include "keyboard.h"
+
+#include "numpad34_parser.h"
 
 extern "C" {
 #include "quantum.h"
@@ -64,6 +68,44 @@ extern "C" {
 #define ROW_BITS(code)  (1 << COL(code))
 
 
+// Override HIDComposite to be able to select which interface we want to hook into
+class HIDSelector : public HIDComposite
+{
+public:
+    HIDSelector(USB *p) : HIDComposite(p) {};
+
+protected:
+    // void ParseHIDData(USBHID *hid, uint8_t ep, bool is_rpt_id, uint8_t len, uint8_t *buf); // Called by the HIDComposite library
+    // bool SelectInterface(uint8_t iface, uint8_t proto);
+
+    void ParseHIDData(USBHID *hid, uint8_t ep, bool is_rpt_id, uint8_t len, uint8_t *buf) {
+        print("parse");
+        HIDComposite::ParseHIDData(hid, ep, is_rpt_id, len, buf);
+    }
+
+};
+
+// // Return true for the interface we want to hook into
+// bool HIDSelector::SelectInterface(uint8_t iface, uint8_t proto)
+// {
+//   printf("select");
+//   if (proto != 0)
+//     return true;
+
+//   return false;
+// }
+
+// // Will be called for all HID data received from the USB interface
+// void HIDSelector::ParseHIDData(USBHID *hid, uint8_t ep, bool is_rpt_id, uint8_t len, uint8_t *buf) {
+//   printf("parse");
+//   if (len && buf)  {
+//     print("\r\n");
+//     for (uint8_t i = 0; i < len; i++) {
+//       xprintf("%02X ", buf[i]);
+//     }
+//   }
+// }
+
 // Integrated key state of all keyboards
 static report_keyboard_t local_keyboard_report;
 
@@ -74,17 +116,19 @@ static bool matrix_is_mod = false;
  * This supports two cascaded hubs and four keyboards
  */
 USB usb_host;
-HIDBoot<USB_HID_PROTOCOL_KEYBOARD>    kbd1(&usb_host);
-HIDBoot<USB_HID_PROTOCOL_KEYBOARD>    kbd2(&usb_host);
-HIDBoot<USB_HID_PROTOCOL_KEYBOARD>    kbd3(&usb_host);
-HIDBoot<USB_HID_PROTOCOL_KEYBOARD>    kbd4(&usb_host);
-KBDReportParser kbd_parser1;
-KBDReportParser kbd_parser2;
-KBDReportParser kbd_parser3;
-KBDReportParser kbd_parser4;
+// HIDBoot<USB_HID_PROTOCOL_KEYBOARD>    kbd1(&usb_host);
+HIDComposite extra1(&usb_host);
+Numpad34ReportParser extra1_parser;
+
+// HIDBoot<USB_HID_PROTOCOL_KEYBOARD>    kbd2(&usb_host);
+// HIDBoot<USB_HID_PROTOCOL_KEYBOARD>    kbd3(&usb_host);
+// HIDBoot<USB_HID_PROTOCOL_KEYBOARD>    kbd4(&usb_host);
+// KBDReportParser kbd_parser1;
+// KBDReportParser kbd_parser2;
+// KBDReportParser kbd_parser3;
+// KBDReportParser kbd_parser4;
 USBHub hub1(&usb_host);
 USBHub hub2(&usb_host);
-
 
 extern "C"
 {
@@ -94,10 +138,16 @@ extern "C"
     void matrix_init(void) {
         // USB Host Shield setup
         usb_host.Init();
-        kbd1.SetReportParser(0, (HIDReportParser*)&kbd_parser1);
-        kbd2.SetReportParser(0, (HIDReportParser*)&kbd_parser2);
-        kbd3.SetReportParser(0, (HIDReportParser*)&kbd_parser3);
-        kbd4.SetReportParser(0, (HIDReportParser*)&kbd_parser4);
+        print("usb host init");
+        // kbd1.SetReportParser(0, &kbd_parser1);
+        // extra1.SetReportParser(2, &extra1_parser);
+        // extra2.SetReportParser(2, &extra1_parser);
+        // extra3.SetReportParser(2, &extra1_parser);
+        // extra4.SetReportParser(2, &extra1_parser);
+
+        // kbd2.SetReportParser(0, &kbd_parser2);
+        // kbd3.SetReportParser(0, &kbd_parser3);
+        // kbd4.SetReportParser(0, &kbd_parser4);
         matrix_init_quantum();
     }
 
@@ -136,55 +186,60 @@ extern "C"
 
     uint8_t matrix_scan(void) {
         static uint16_t last_time_stamp1 = 0;
+        static uint16_t last_time_stamp1_extra = 0;
         static uint16_t last_time_stamp2 = 0;
         static uint16_t last_time_stamp3 = 0;
         static uint16_t last_time_stamp4 = 0;
 
-        // check report came from keyboards
-        if (kbd_parser1.time_stamp != last_time_stamp1 ||
-            kbd_parser2.time_stamp != last_time_stamp2 ||
-            kbd_parser3.time_stamp != last_time_stamp3 ||
-            kbd_parser4.time_stamp != last_time_stamp4) {
+        // // check report came from keyboards
+        // if (kbd_parser1.time_stamp != last_time_stamp1 ||
+        //     // extra1_parser.time_stamp != last_time_stamp1_extra ||
+        //     kbd_parser2.time_stamp != last_time_stamp2 ||
+        //     kbd_parser3.time_stamp != last_time_stamp3 ||
+        //     kbd_parser4.time_stamp != last_time_stamp4) {
 
-            last_time_stamp1 = kbd_parser1.time_stamp;
-            last_time_stamp2 = kbd_parser2.time_stamp;
-            last_time_stamp3 = kbd_parser3.time_stamp;
-            last_time_stamp4 = kbd_parser4.time_stamp;
+        //     last_time_stamp1 = kbd_parser1.time_stamp;
+        //     // last_time_stamp1_extra = extra1_parser.time_stamp;
 
-            // clear and integrate all reports
-            local_keyboard_report = {};
-            or_report(kbd_parser1.report);
-            or_report(kbd_parser2.report);
-            or_report(kbd_parser3.report);
-            or_report(kbd_parser4.report);
+        //     last_time_stamp2 = kbd_parser2.time_stamp;
+        //     last_time_stamp3 = kbd_parser3.time_stamp;
+        //     last_time_stamp4 = kbd_parser4.time_stamp;
 
-            matrix_is_mod = true;
+        //     // clear and integrate all reports
+        //     local_keyboard_report = {};
+        //     or_report(kbd_parser1.report);
+        //     or_report(kbd_parser2.report);
+        //     or_report(kbd_parser3.report);
+        //     or_report(kbd_parser4.report);
 
-            dprintf("state:  %02X %02X", local_keyboard_report.mods, local_keyboard_report.reserved);
-            for (uint8_t i = 0; i < KEYBOARD_REPORT_KEYS; i++) {
-                dprintf(" %02X", local_keyboard_report.keys[i]);
-            }
-            dprint("\r\n");
-        } else {
-            matrix_is_mod = false;
-        }
+        //     matrix_is_mod = true;
+
+        //     xprintf("state:  %02X %02X", local_keyboard_report.mods, local_keyboard_report.reserved);
+        //     for (uint8_t i = 0; i < KEYBOARD_REPORT_KEYS; i++) {
+        //         xprintf(" %02X", local_keyboard_report.keys[i]);
+        //     }
+        //     dprint("\r\n");
+        // } else {
+        //     matrix_is_mod = false;
+        // }
+        matrix_is_mod = true;
 
         uint16_t timer;
         timer = timer_read();
         usb_host.Task();
         timer = timer_elapsed(timer);
         if (timer > 100) {
-            dprintf("host.Task: %d\n", timer);
+            xprintf("host.Task: %d\n", timer);
         }
 
         static uint8_t usb_state = 0;
         if (usb_state != usb_host.getUsbTaskState()) {
             usb_state = usb_host.getUsbTaskState();
-            dprintf("usb_state: %02X\n", usb_state);
+            xprintf("usb_state: %02X\n", usb_state);
 
             // restore LED state when keyboard comes up
             if (usb_state == USB_STATE_RUNNING) {
-                dprintf("speed: %s\n", usb_host.getVbusState()==FSHOST ? "full" : "low");
+                xprintf("speed: %s\n", usb_host.getVbusState()==FSHOST ? "full" : "low");
                 keyboard_set_leds(host_keyboard_leds());
             }
         }
@@ -252,11 +307,11 @@ extern "C"
 
     void led_set(uint8_t usb_led)
     {
-        if (kbd1.isReady()) kbd1.SetReport(0, 0, 2, 0, 1, &usb_led);
-        if (kbd2.isReady()) kbd2.SetReport(0, 0, 2, 0, 1, &usb_led);
-        if (kbd3.isReady()) kbd3.SetReport(0, 0, 2, 0, 1, &usb_led);
-        if (kbd4.isReady()) kbd4.SetReport(0, 0, 2, 0, 1, &usb_led);
-        led_set_kb(usb_led);
+        // if (kbd1.isReady()) kbd1.SetReport(0, 0, 2, 0, 1, &usb_led);       
+        // if (kbd2.isReady()) kbd2.SetReport(0, 0, 2, 0, 1, &usb_led);
+        // if (kbd3.isReady()) kbd3.SetReport(0, 0, 2, 0, 1, &usb_led);
+        // if (kbd4.isReady()) kbd4.SetReport(0, 0, 2, 0, 1, &usb_led);
+        // led_set_kb(usb_led);
     }
 
 };

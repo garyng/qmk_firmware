@@ -16,14 +16,17 @@ e-mail   :  support@circuitsathome.com
  */
 
 #include "hidcomposite.h"
+#include <print.h>
 
 HIDComposite::HIDComposite(USB *p) :
 USBHID(p),
 qNextPollTime(0),
 pollInterval(0),
 bPollEnable(false),
-bHasReportId(false) {
+bHasReportId(true) {
+        print("initialize start");
         Initialize();
+        print("initialize end");
 
         if(pUsb)
                 pUsb->RegisterDeviceClass(this);
@@ -70,6 +73,7 @@ void HIDComposite::Initialize() {
 }
 
 bool HIDComposite::SetReportParser(uint8_t id, HIDReportParser *prs) {
+        xprintf("set report parser start, %d", id);
         for(uint8_t i = 0; i < MAX_REPORT_PARSERS; i++) {
                 if(rptParsers[i].rptId == 0 && rptParsers[i].rptParser == NULL) {
                         rptParsers[i].rptId = id;
@@ -77,10 +81,13 @@ bool HIDComposite::SetReportParser(uint8_t id, HIDReportParser *prs) {
                         return true;
                 }
         }
+        xprintf("set report parser end, %d", id);
         return false;
 }
 
 HIDReportParser* HIDComposite::GetReportParser(uint8_t id) {
+        xprintf("get report parser, %d", id);
+
         if(!bHasReportId)
                 return ((rptParsers[0].rptParser) ? rptParsers[0].rptParser : NULL);
 
@@ -92,6 +99,8 @@ HIDReportParser* HIDComposite::GetReportParser(uint8_t id) {
 }
 
 uint8_t HIDComposite::Init(uint8_t parent, uint8_t port, bool lowspeed) {
+        print("Init");
+
         const uint8_t constBufSize = sizeof (USB_DEVICE_DESCRIPTOR);
 
         uint8_t buf[constBufSize];
@@ -106,7 +115,7 @@ uint8_t HIDComposite::Init(uint8_t parent, uint8_t port, bool lowspeed) {
 
         AddressPool &addrPool = pUsb->GetAddressPool();
 
-        USBTRACE("HU Init\r\n");
+        print("HU Init\r\n");
 
         if(bAddress)
                 return USB_ERROR_CLASS_INSTANCE_ALREADY_IN_USE;
@@ -118,7 +127,7 @@ uint8_t HIDComposite::Init(uint8_t parent, uint8_t port, bool lowspeed) {
                 return USB_ERROR_ADDRESS_NOT_FOUND_IN_POOL;
 
         if(!p->epinfo) {
-                USBTRACE("epinfo\r\n");
+                print("epinfo\r\n");
                 return USB_ERROR_EPINFO_IS_NULL;
         }
 
@@ -162,13 +171,13 @@ uint8_t HIDComposite::Init(uint8_t parent, uint8_t port, bool lowspeed) {
                 p->lowspeed = false;
                 addrPool.FreeAddress(bAddress);
                 bAddress = 0;
-                USBTRACE2("setAddr:", rcode);
+                xprintf("setAddr: %02X", rcode);
                 return rcode;
         }
 
         //delay(2); //per USB 2.0 sect.9.2.6.3
 
-        USBTRACE2("Addr:", bAddress);
+        xprintf("Addr: %02X", bAddress);
 
         p->lowspeed = false;
 
@@ -196,7 +205,7 @@ uint8_t HIDComposite::Init(uint8_t parent, uint8_t port, bool lowspeed) {
         if(rcode)
                 goto FailSetDevTblEntry;
 
-        USBTRACE2("NC:", num_of_conf);
+        xprintf("NC: %02X", num_of_conf);
 
         for(uint8_t i = 0; i < num_of_conf; i++) {
                 //HexDumper<USBReadParser, uint16_t, uint16_t> HexDump;
@@ -219,7 +228,7 @@ uint8_t HIDComposite::Init(uint8_t parent, uint8_t port, bool lowspeed) {
         // Assign epInfo to epinfo pointer
         rcode = pUsb->setEpInfoEntry(bAddress, bNumEP, epInfo);
 
-        USBTRACE2("Cnf:", bConfNum);
+        xprintf("Cnf: %02X", bConfNum);
 
         // Set Configuration Value
         rcode = pUsb->setConf(bAddress, 0, bConfNum);
@@ -227,13 +236,13 @@ uint8_t HIDComposite::Init(uint8_t parent, uint8_t port, bool lowspeed) {
         if(rcode)
                 goto FailSetConfDescr;
 
-        USBTRACE2("NumIface:", bNumIface);
+        xprintf("NumIface: %02X", bNumIface);
 
         for(uint8_t i = 0; i < bNumIface; i++) {
                 if(hidInterfaces[i].epIndex[epInterruptInIndex] == 0)
                         continue;
 
-                USBTRACE2("SetIdle:", hidInterfaces[i].bmInterface);
+                xprintf("SetIdle: %02X", hidInterfaces[i].bmInterface);
 
                 rcode = SetIdle(hidInterfaces[i].bmInterface, 0, 0);
 
@@ -241,7 +250,7 @@ uint8_t HIDComposite::Init(uint8_t parent, uint8_t port, bool lowspeed) {
                         goto FailSetIdle;
         }
 
-        USBTRACE("HU configured\r\n");
+        print("HU configured\r\n");
 
         OnInitSuccessful();
 
@@ -275,7 +284,7 @@ FailSetConfDescr:
 
 FailSetIdle:
 #ifdef DEBUG_USB_HOST
-        USBTRACE("SetIdle:");
+        print("SetIdle:");
 #endif
 
 #ifdef DEBUG_USB_HOST
@@ -287,6 +296,7 @@ Fail:
 }
 
 HIDComposite::HIDInterface* HIDComposite::FindInterface(uint8_t iface, uint8_t alt, uint8_t proto) {
+        print("find interface");
         for(uint8_t i = 0; i < bNumIface && i < maxHidInterfaces; i++)
                 if(hidInterfaces[i].bmInterface == iface && hidInterfaces[i].bmAltSet == alt
                         && hidInterfaces[i].bmProtocol == proto)
@@ -298,6 +308,7 @@ void HIDComposite::EndpointXtract(uint8_t conf, uint8_t iface, uint8_t alt, uint
         //ErrorMessage<uint8_t>(PSTR("\r\nConf.Val"), conf);
         //ErrorMessage<uint8_t>(PSTR("Iface Num"), iface);
         //ErrorMessage<uint8_t>(PSTR("Alt.Set"), alt);
+        printf("endpoint xtract");
 
         bConfNum = conf;
 
@@ -338,6 +349,8 @@ void HIDComposite::EndpointXtract(uint8_t conf, uint8_t iface, uint8_t alt, uint
 }
 
 uint8_t HIDComposite::Release() {
+        print("release");
+
         pUsb->GetAddressPool().FreeAddress(bAddress);
 
         bNumEP = 1;
@@ -348,20 +361,30 @@ uint8_t HIDComposite::Release() {
 }
 
 void HIDComposite::ZeroMemory(uint8_t len, uint8_t *buf) {
+        print("zero memory");
+
         for(uint8_t i = 0; i < len; i++)
                 buf[i] = 0;
 }
 
 uint8_t HIDComposite::Poll() {
-        uint8_t rcode = 0;
+        xprintf("bAddress %d, bNumEP %d, bNumIface %d, bConfNum %d, pollInterval %d \n\r", bAddress, bNumEP, bNumIface, bConfNum, pollInterval);
 
+        uint8_t rcode = 0;
         if(!bPollEnable)
                 return 0;
 
+        print("poll enabled\n\r");
+
         if((int32_t)((uint32_t)millis() - qNextPollTime) >= 0L) {
+
+                print("inside if\n\r");
+
                 qNextPollTime = (uint32_t)millis() + pollInterval;
 
                 uint8_t buf[constBuffLen];
+
+                xprintf("bNumIface: %d", bNumIface);
 
                 for(uint8_t i = 0; i < bNumIface; i++) {
                         uint8_t index = hidInterfaces[i].epIndex[epInterruptInIndex];
@@ -377,7 +400,7 @@ uint8_t HIDComposite::Poll() {
 
                         if(rcode) {
                                 if(rcode != hrNAK)
-                                        USBTRACE3("(hidcomposite.h) Poll:", rcode, 0x81);
+                                        xprintf("(hidcomposite.h) Poll: %02X", rcode);
                                 continue;
                         }
 
@@ -387,16 +410,14 @@ uint8_t HIDComposite::Poll() {
                         if(read > constBuffLen)
                                 read = constBuffLen;
 
-#if 0
-                        Notify(PSTR("\r\nBuf: "), 0x80);
+                        print("\r\nBuf: ");
 
                         for(uint8_t i = 0; i < read; i++) {
-                                D_PrintHex<uint8_t > (buf[i], 0x80);
-                                Notify(PSTR(" "), 0x80);
+                                xprintf(" %02X", buf[i]);
                         }
 
-                        Notify(PSTR("\r\n"), 0x80);
-#endif
+                        print("\n\r");
+
                         ParseHIDData(this, epInfo[index].epAddr, bHasReportId, (uint8_t)read, buf);
 
                         HIDReportParser *prs = GetReportParser(((bHasReportId) ? *buf : 0));
