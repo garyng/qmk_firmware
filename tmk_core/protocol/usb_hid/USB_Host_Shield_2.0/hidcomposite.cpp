@@ -22,7 +22,7 @@ USBHID(p),
 qNextPollTime(0),
 pollInterval(0),
 bPollEnable(false),
-bHasReportId(false) {
+bHasReportId(true) {
         Initialize();
 
         if(pUsb)
