@@ -36,7 +36,7 @@ typedef struct {
 
 void HidGenericReportParser::Parse(uint16_t vid, uint16_t pid, uint8_t iface, uint8_t endpoint, uint8_t len, uint8_t *buff) {
     dprintf("vid: %04X pid: %04X", vid, pid);
-    dprintf(" iface: %02X endpoint: %02X", iface, endpoint)
+    dprintf(" iface: %02X endpoint: %02X", iface, endpoint);
     dprint(" buf: ");
     for (uint8_t i = 0; i < len; ++i) {
         dprintf("%02X", buff[i]);
@@ -45,13 +45,16 @@ void HidGenericReportParser::Parse(uint16_t vid, uint16_t pid, uint8_t iface, ui
 
     time_stamp = millis();
 
-    // 34 keys numpad
+    // try parse report id, as it is usually the first byte
+    uint8_t reportId = (uint8_t)*buff;
+
     if (vid == 0x258A && pid == 0x0131) {
-        if (reportId == 0) {
+        // 34 keys numpad
+
+        if (iface == 0 && endpoint == 1) {
             // normal keys
 
             ::memcpy(&report, buff, sizeof(report_keyboard_t));
-
         } else if (reportId == 3) {
             // media keys
 
@@ -65,6 +68,16 @@ void HidGenericReportParser::Parse(uint16_t vid, uint16_t pid, uint8_t iface, ui
             if (mediaKeysReport.AlCalculator == 1) {
                 report.keys[1] = KC_CALCULATOR;
             }
+        }
+    }
+
+    if (vid == 0x046D && pid == 0xC52B) {
+        // logitech unifying receiver
+
+        if (iface == 0 && endpoint == 1) {
+            // normal keys
+
+            ::memcpy(&report, buff, sizeof(report_keyboard_t));
         }
     }
 }
