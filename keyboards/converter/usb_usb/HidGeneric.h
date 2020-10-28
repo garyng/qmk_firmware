@@ -42,7 +42,7 @@ void HidGenericReportParser::Parse(uint16_t vid, uint16_t pid, uint8_t iface, ui
     xprintf(" iface: %02X endpoint: %02X\n\r", iface, endpoint);
 }
 
-
+// Modified from hidcomposite
 class HidGeneric : public USBHID {
     //struct ReportParser {
     //    uint8_t          rptId;
@@ -95,10 +95,10 @@ class HidGeneric : public USBHID {
     //virtual void ParseHIDData(USBHID *hid, uint8_t ep, bool is_rpt_id, uint8_t len, uint8_t *buf);
 
    public:
-    HidGeneric(USB *p, HidGenericReportParser *reportParser);
 
     // HID implementation
     //bool SetReportParser(uint8_t id, HIDReportParser *prs);
+    HidGeneric(USB *p);
 
     // USBDeviceConfig implementation
     uint8_t Init(uint8_t parent, uint8_t port, bool lowspeed);
@@ -117,11 +117,15 @@ class HidGeneric : public USBHID {
 
     // Returns true if we should listen on an interface, false if not
     virtual bool SelectInterface(uint8_t iface, uint8_t proto);
+
+    void SetReportParser(HidGenericReportParser *parser) {
+        _reportParser = parser;
+    }
 };
 
 
 
-HidGeneric::HidGeneric(USB *p, HidGenericReportParser *reportParser) : USBHID(p), _reportParser(reportParser), qNextPollTime(0), pollInterval(0), bPollEnable(false), bHasReportId(true) {
+HidGeneric::HidGeneric(USB *p) : USBHID(p), qNextPollTime(0), pollInterval(0), bPollEnable(false), bHasReportId(true) {
     Initialize();
 
     if (pUsb) pUsb->RegisterDeviceClass(this);

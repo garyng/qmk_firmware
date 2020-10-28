@@ -77,7 +77,7 @@ static bool matrix_is_mod = false;
  */
 USB usb_host;
 HidGenericReportParser parser;
-HidGeneric    kbd1(&usb_host, &parser);
+HidGeneric kbd1(&usb_host);
 // HIDBoot<USB_HID_PROTOCOL_KEYBOARD>    kbd1(&usb_host);
 // HIDBoot<USB_HID_PROTOCOL_KEYBOARD>    kbd2(&usb_host);
 // HIDBoot<USB_HID_PROTOCOL_KEYBOARD>    kbd3(&usb_host);
@@ -98,6 +98,8 @@ extern "C"
     void matrix_init(void) {
         // USB Host Shield setup
         usb_host.Init();
+        kbd1.SetReportParser(&parser);
+
         // kbd1.SetReportParser(0, (HIDReportParser*)&kbd_parser1);
         // kbd2.SetReportParser(0, (HIDReportParser*)&kbd_parser2);
         // kbd3.SetReportParser(0, (HIDReportParser*)&kbd_parser3);
@@ -119,7 +121,6 @@ extern "C"
             }
         }
     }
-
     __attribute__ ((weak))
     void matrix_init_kb(void) {
         matrix_init_user();
