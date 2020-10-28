@@ -21,10 +21,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // USB HID host
 #include "Usb.h"
 #include "usbhub.h"
-#include "usbhid.h"
-#include "hidboot.h"
-#include "parser.h"
-#include "hidcomposite.h"
 
 #include "keycode.h"
 #include "util.h"
@@ -76,8 +72,8 @@ static bool matrix_is_mod = false;
  * This supports two cascaded hubs and four keyboards
  */
 USB usb_host;
-HidGenericReportParser parser;
 HidGeneric kbd1(&usb_host);
+HidGenericReportParser parser;
 // HIDBoot<USB_HID_PROTOCOL_KEYBOARD>    kbd1(&usb_host);
 // HIDBoot<USB_HID_PROTOCOL_KEYBOARD>    kbd2(&usb_host);
 // HIDBoot<USB_HID_PROTOCOL_KEYBOARD>    kbd3(&usb_host);
@@ -95,6 +91,7 @@ extern "C"
     uint8_t matrix_rows(void) { return MATRIX_ROWS; }
     uint8_t matrix_cols(void) { return MATRIX_COLS; }
     bool matrix_has_ghost(void) { return false; }
+
     void matrix_init(void) {
         // USB Host Shield setup
         usb_host.Init();
@@ -121,6 +118,7 @@ extern "C"
             }
         }
     }
+
     __attribute__ ((weak))
     void matrix_init_kb(void) {
         matrix_init_user();
