@@ -25,7 +25,7 @@ EXTRAKEY_ENABLE  = yes  # Audio control and System control
 USB_HID_ENABLE   = yes
 CUSTOM_MATRIX    = yes
 
-SRC += HidGeneric.cpp HidGenericParser.cpp custom_matrix.cpp
+SRC += HidGeneric.cpp HidGenericReportParser.cpp custom_matrix.cpp
 
 DEFAULT_FOLDER = converter/usb_usb/hasu
 OPT_DEFS += -DDEBUG_USB_HOST

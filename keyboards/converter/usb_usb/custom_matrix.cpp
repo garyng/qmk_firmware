@@ -32,7 +32,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "led.h"
 #include "host.h"
 #include "keyboard.h"
-
 extern "C" {
 #include "quantum.h"
 }
@@ -78,7 +77,7 @@ USBHub hub2(&usb_host);
 
 HidGeneric keyboards[MAX_KEYBOARDS] = {HidGeneric(&usb_host), HidGeneric(&usb_host), HidGeneric(&usb_host), HidGeneric(&usb_host)};
 HidGenericReportParser parsers[MAX_KEYBOARDS];
-uint16_t last_time_stamps[MAX_KEYBOARDS];
+uint16_t               last_time_stamps[MAX_KEYBOARDS];
 
 extern "C"
 {

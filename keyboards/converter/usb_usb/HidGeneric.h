@@ -1,6 +1,6 @@
 #pragma once
 #include <usbhid.h>
-#include "HidGenericParser.h"
+#include "HidGenericReportParser.h"
 
 // Modified from hidcomposite
 class HidGeneric : public USBHID {
