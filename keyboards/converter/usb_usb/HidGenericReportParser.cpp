@@ -1,4 +1,4 @@
-#include "HidGenericParser.h"
+#include "HidGenericReportParser.h"
 #include "usbhid.h"
 
 #include "debug.h"
