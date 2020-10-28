@@ -1,53 +1,23 @@
 #pragma once
 #include <usbhid.h>
 
-//
-//// Modified from USBHIDMultimediaKbd.ino
-//// This will select all interfaces available
-//class HidGeneric : public HIDComposite {
-//public:
-//    HidGeneric(USB *p)
-//        : HIDComposite(p) { bHasReportId = true; };
-//
-//protected:
-//    void ParseHIDData(USBHID *hid, uint8_t ep, bool is_rpt_id, uint8_t len, uint8_t *buf); // Called by the HIDComposite library
-//    bool SelectInterface(uint8_t iface, uint8_t proto);
-//};
-//
-//bool HidGeneric::SelectInterface(uint8_t iface, uint8_t proto) {
-//    xprintf("iface %d, proto %d", iface, proto);
-//    return true;
-//}
-//
-//void HidGeneric::ParseHIDData(USBHID *hid, uint8_t ep, bool is_rpt_id, uint8_t len, uint8_t *buf) {
-//    if (len && buf) {
-//        xprintf("ep: %d ", ep, is_rpt_id);
-//        for (uint8_t i = 0; i < len; i++) {
-//            xprintf("%02X ", buf[i]);
-//        }
-//        print("\n\r");
-//    }
-//}
-//
-//
-//
-
 class HidGenericReportParser {
 public:
     virtual void Parse(uint16_t vid, uint16_t pid, uint8_t iface, uint8_t endpoint, uint8_t len, uint8_t *buff);
 };
 
 void HidGenericReportParser::Parse(uint16_t vid, uint16_t pid, uint8_t iface, uint8_t endpoint, uint8_t len, uint8_t *buff) {
-    xprintf("vid: %04X pid: %04X", vid, pid);
-    xprintf(" iface: %02X endpoint: %02X\n\r", iface, endpoint);
+    dprintf("vid: %04X pid: %04X", vid, pid);
+    dprintf(" iface: %02X endpoint: %02X", iface, endpoint);
+    dprint(" buf: ");
+    for (uint8_t i = 0; i < len; ++i) {
+        dprintf("%02X", buff[i]);
+    }
+    dprint("\n\r");
 }
 
 // Modified from hidcomposite
 class HidGeneric : public USBHID {
-    //struct ReportParser {
-    //    uint8_t          rptId;
-    //    HIDReportParser *rptParser;
-    //} rptParsers[MAX_REPORT_PARSERS];
     HidGenericReportParser *_reportParser;
 
     // HID class specific descriptor type and length info obtained from HID descriptor
@@ -62,42 +32,33 @@ class HidGeneric : public USBHID {
             uint8_t bmAltSet : 3;
             uint8_t bmProtocol : 2;
         };
+
         uint8_t epIndex[maxEpPerInterface];
     };
 
-    uint8_t  bConfNum;       // configuration number
-    uint8_t  bNumIface;      // number of interfaces in the configuration
-    uint8_t  bNumEP;         // total number of EP in the configuration
-    uint32_t qNextPollTime;  // next poll time
+    uint8_t  bConfNum;      // configuration number
+    uint8_t  bNumIface;     // number of interfaces in the configuration
+    uint8_t  bNumEP;        // total number of EP in the configuration
+    uint32_t qNextPollTime; // next poll time
     uint8_t  pollInterval;
-    bool     bPollEnable;  // poll enable flag
+    bool     bPollEnable; // poll enable flag
 
-    static const uint16_t constBuffLen = 64;  // event buffer length
+    static const uint16_t constBuffLen = 64; // event buffer length
 
     void          Initialize();
     HIDInterface *FindInterface(uint8_t iface, uint8_t alt, uint8_t proto);
 
     void ZeroMemory(uint8_t len, uint8_t *buf);
 
-   protected:
+protected:
     EpInfo       epInfo[totalEndpoints];
     HIDInterface hidInterfaces[maxHidInterfaces];
 
     bool bHasReportId;
 
-    uint16_t PID, VID;  // PID and VID of connected device
+    uint16_t PID, VID; // PID and VID of connected device
 
-    // HID implementation
-    //HIDReportParser *GetReportParser(uint8_t id);
-
-    //virtual uint8_t OnInitSuccessful() { return 0; };
-
-    //virtual void ParseHIDData(USBHID *hid, uint8_t ep, bool is_rpt_id, uint8_t len, uint8_t *buf);
-
-   public:
-
-    // HID implementation
-    //bool SetReportParser(uint8_t id, HIDReportParser *prs);
+public:
     HidGeneric(USB *p);
 
     // USBDeviceConfig implementation
@@ -124,8 +85,12 @@ class HidGeneric : public USBHID {
 };
 
 
-
-HidGeneric::HidGeneric(USB *p) : USBHID(p), qNextPollTime(0), pollInterval(0), bPollEnable(false), bHasReportId(true) {
+HidGeneric::HidGeneric(USB *p)
+    : USBHID(p),
+      qNextPollTime(0),
+      pollInterval(0),
+      bPollEnable(false),
+      bHasReportId(true) {
     Initialize();
 
     if (pUsb) pUsb->RegisterDeviceClass(this);
@@ -143,11 +108,6 @@ uint16_t HidGeneric::GetHidClassDescrLen(uint8_t type, uint8_t num) {
 }
 
 void HidGeneric::Initialize() {
-    //for (uint8_t i = 0; i < MAX_REPORT_PARSERS; i++) {
-    //    rptParsers[i].rptId     = 0;
-    //    rptParsers[i].rptParser = NULL;
-    //}
-
     for (uint8_t i = 0; i < HID_MAX_HID_CLASS_DESCRIPTORS; i++) {
         descrInfo[i].bDescrType        = 0;
         descrInfo[i].wDescriptorLength = 0;
@@ -171,26 +131,6 @@ void HidGeneric::Initialize() {
     pollInterval = 0;
 }
 
-//bool HidGeneric::SetReportParser(uint8_t id, HIDReportParser *prs) {
-//    for (uint8_t i = 0; i < MAX_REPORT_PARSERS; i++) {
-//        if (rptParsers[i].rptId == 0 && rptParsers[i].rptParser == NULL) {
-//            rptParsers[i].rptId     = id;
-//            rptParsers[i].rptParser = prs;
-//            return true;
-//        }
-//    }
-//    return false;
-//}
-//
-//HIDReportParser *HidGeneric::GetReportParser(uint8_t id) {
-//    if (!bHasReportId) return ((rptParsers[0].rptParser) ? rptParsers[0].rptParser : NULL);
-//
-//    for (uint8_t i = 0; i < MAX_REPORT_PARSERS; i++) {
-//        if (rptParsers[i].rptId == id) return rptParsers[i].rptParser;
-//    }
-//    return NULL;
-//}
-
 uint8_t HidGeneric::Init(uint8_t parent, uint8_t port, bool lowspeed) {
     const uint8_t constBufSize = sizeof(USB_DEVICE_DESCRIPTOR);
 
@@ -201,7 +141,7 @@ uint8_t HidGeneric::Init(uint8_t parent, uint8_t port, bool lowspeed) {
     EpInfo *               oldep_ptr = NULL;
     uint8_t                len       = 0;
 
-    uint8_t num_of_conf;  // number of configurations
+    uint8_t num_of_conf; // number of configurations
     // uint8_t num_of_intf; // number of interfaces
 
     AddressPool &addrPool = pUsb->GetAddressPool();
@@ -278,7 +218,7 @@ uint8_t HidGeneric::Init(uint8_t parent, uint8_t port, bool lowspeed) {
 
     if (rcode) goto FailGetDevDescr;
 
-    VID = udd->idVendor;  // Can be used by classes that inherits this class to check the VID and PID of the connected device
+    VID = udd->idVendor; // Can be used by classes that inherits this class to check the VID and PID of the connected device
     PID = udd->idProduct;
     USBTRACE2("VID:", VID);
     USBTRACE2("PID:", PID);
@@ -302,7 +242,7 @@ uint8_t HidGeneric::Init(uint8_t parent, uint8_t port, bool lowspeed) {
         if (rcode) goto FailGetConfDescr;
 
         if (bNumEP > 1) break;
-    }  // for
+    } // for
 
     if (bNumEP < 2) return USB_DEV_CONFIG_ERROR_DEVICE_NOT_SUPPORTED;
 
@@ -329,8 +269,6 @@ uint8_t HidGeneric::Init(uint8_t parent, uint8_t port, bool lowspeed) {
     }
 
     USBTRACE("HU configured\r\n");
-
-    //OnInitSuccessful();
 
     bPollEnable = true;
     return 0;
@@ -410,9 +348,9 @@ void HidGeneric::EndpointXtract(uint8_t conf, uint8_t iface, uint8_t alt, uint8_
         epInfo[bNumEP].bmNakPower  = USB_NAK_NOWAIT;
 
         // Fill in the endpoint index list
-        piface->epIndex[index] = bNumEP;  //(pep->bEndpointAddress & 0x0F);
+        piface->epIndex[index] = bNumEP; //(pep->bEndpointAddress & 0x0F);
 
-        if (pollInterval < pep->bInterval)  // Set the polling interval as the largest polling interval obtained from endpoints
+        if (pollInterval < pep->bInterval) // Set the polling interval as the largest polling interval obtained from endpoints
             pollInterval = pep->bInterval;
 
         bNumEP++;
@@ -455,7 +393,8 @@ uint8_t HidGeneric::Poll() {
             uint8_t rcode = pUsb->inTransfer(bAddress, epInfo[index].epAddr, &read, buf);
 
             if (rcode) {
-                if (rcode != hrNAK) USBTRACE3("(HidGeneric.h) Poll:", rcode, 0x81);
+                if (rcode != hrNAK)
+                    USBTRACE3("(HidGeneric.h) Poll:", rcode, 0x81);
                 continue;
             }
 
@@ -473,11 +412,6 @@ uint8_t HidGeneric::Poll() {
 
                         Notify(PSTR("\r\n"), 0x80);
 #endif
-            //ParseHIDData(this, epInfo[index].epAddr, bHasReportId, (uint8_t)read, buf);
-
-            //HIDReportParser *prs = GetReportParser(((bHasReportId) ? *buf : 0));
-
-            //if (prs) prs->Parse(this, bHasReportId, (uint8_t)read, buf);
 
             _reportParser->Parse(VID, PID, i, epInfo[index].epAddr, (uint8_t)read, buf);
         }
@@ -489,16 +423,6 @@ uint8_t HidGeneric::Poll() {
 uint8_t HidGeneric::SndRpt(uint16_t nbytes, uint8_t *dataptr) { return pUsb->outTransfer(bAddress, epInfo[epInterruptOutIndex].epAddr, nbytes, dataptr); }
 
 bool HidGeneric::SelectInterface(uint8_t iface, uint8_t proto) {
-    xprintf("iface %d, proto %d\n\r", iface, proto);
+    dprintf("iface %d, proto %d\n\r", iface, proto);
     return true;
 }
-//
-//void HidGeneric::ParseHIDData(USBHID *hid, uint8_t ep, bool is_rpt_id, uint8_t len, uint8_t *buf) {
-//    if (len && buf) {
-//        xprintf("ep: %d ", ep, is_rpt_id);
-//        for (uint8_t i = 0; i < len; i++) {
-//            xprintf("%02X ", buf[i]);
-//        }
-//        print("\n\r");
-//    }
-//}
