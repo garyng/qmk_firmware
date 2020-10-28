@@ -138,6 +138,24 @@ extern "C"
     }
 
     uint8_t matrix_scan(void) {
+        static uint16_t last_time_stamp = 0;
+
+        if (parser.time_stamp != last_time_stamp) {
+            last_time_stamp = parser.time_stamp;
+
+            local_keyboard_report = {};
+            or_report(parser.report);
+            matrix_is_mod = true;
+
+            dprintf("state:  %02X %02X", local_keyboard_report.mods, local_keyboard_report.reserved);
+            for (uint8_t i = 0; i < KEYBOARD_REPORT_KEYS; i++) {
+                dprintf(" %02X", local_keyboard_report.keys[i]);
+            }
+            dprint("\r\n");
+        } else {
+            matrix_is_mod = false;
+        }
+
         // static uint16_t last_time_stamp1 = 0;
         // static uint16_t last_time_stamp2 = 0;
         // static uint16_t last_time_stamp3 = 0;
@@ -255,7 +273,7 @@ extern "C"
 
     void led_set(uint8_t usb_led)
     {
-        // if (kbd1.isReady()) kbd1.SetReport(0, 0, 2, 0, 1, &usb_led);
+         if (kbd1.isReady()) kbd1.SetReport(0, 0, 2, 0, 1, &usb_led);
         // if (kbd2.isReady()) kbd2.SetReport(0, 0, 2, 0, 1, &usb_led);
         // if (kbd3.isReady()) kbd3.SetReport(0, 0, 2, 0, 1, &usb_led);
         // if (kbd4.isReady()) kbd4.SetReport(0, 0, 2, 0, 1, &usb_led);
