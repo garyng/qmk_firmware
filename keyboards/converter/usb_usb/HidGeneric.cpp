@@ -332,6 +332,6 @@ uint8_t HidGeneric::Poll() {
 uint8_t HidGeneric::SndRpt(uint16_t nbytes, uint8_t *dataptr) { return pUsb->outTransfer(bAddress, epInfo[epInterruptOutIndex].epAddr, nbytes, dataptr); }
 
 bool HidGeneric::SelectInterface(uint8_t iface, uint8_t proto) {
-    dprintf("iface %d, proto %d\n\r", iface, proto);
+    dprintf("iface %d, proto %d\n", iface, proto);
     return true;
 }

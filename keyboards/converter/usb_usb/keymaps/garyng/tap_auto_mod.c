@@ -16,7 +16,7 @@ static tap_auto_mod_state_t tam_state;
 
 void tam_on_each(tap_auto_mod_state_t *state) {
     uint8_t count = state->count;
-    dprintf("on each tap, count: %d\n\r", count);
+    dprintf("on each tap, count: %d\n", count);
 
     if (state->count == MAX_TAM_TAPS) {
         pre_register_key(state);
@@ -29,7 +29,7 @@ void tam_on_each(tap_auto_mod_state_t *state) {
 void tam_finished(tap_auto_mod_state_t *state) {
     if (state->finished) return;
     state->finished = true;
-    dprint("tam finished\n\r");
+    dprint("tam finished\n");
 
     uint8_t count = state->count;
 
@@ -42,7 +42,7 @@ void tam_finished(tap_auto_mod_state_t *state) {
 
 void tam_reset(tap_auto_mod_state_t *state) {
     if (state->pressed) return;
-    dprint("tam reset\n\r");
+    dprint("tam reset\n");
     uint8_t count = state->count;
 
     unregister_code16(state->keycode);
@@ -67,7 +67,7 @@ void tam_handle_interruption(uint16_t keycode, keyrecord_t *record, tap_auto_mod
     // if the key is different
     if (keycode == state->keycode) return;
 
-    dprintf("interrupted by %04X\r\n", keycode);
+    dprintf("interrupted by %04X\n", keycode);
 
     tam_finished(state);
     // set it to key up otherwise reset won't run
