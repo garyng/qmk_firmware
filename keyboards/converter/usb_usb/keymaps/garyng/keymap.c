@@ -47,6 +47,14 @@ const uint16_t layers_to_kc[MAX_WK] = {
     [LAYER4] = KC_F17
 };
 
+const uint16_t wk_to_kc[MAX_WK] = {
+    [WK_0 - WK_0] = KC_BSPC,
+    [WK_1 - WK_0] = KC_EQUAL,
+    [WK_2 - WK_0] = KC_TAB,
+    [WK_3 - WK_0] = KC_ESC,
+    [WK_4 - WK_0] = KC_NO
+};
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /* 0: plain Qwerty without layer switching
      *         ,---------------. ,---------------. ,---------------.
@@ -149,6 +157,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     if (WK_0 <= keycode && keycode <= WK_4) {
         current_layer = keycode - WK_0;
+         process_tam_user(wk_to_kc[keycode - WK_0], record);
         return false;
         // todo: tap a key?
     } else if (keycode != current_wk) {
