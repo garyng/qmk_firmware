@@ -6,3 +6,5 @@ MOUSEKEY_ENABLE = no
 CONSOLE_ENABLE = yes
 COMMAND_ENABLE = no
 NKRO_ENABLE = no
+
+SRC += tap_auto_mod.c

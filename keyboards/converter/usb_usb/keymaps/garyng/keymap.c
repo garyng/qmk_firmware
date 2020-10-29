@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdio.h>
 #include <stdlib.h>
 #include <print.h>
+#include "tap_auto_mod.h"
 
 #define MAX_WK 5
 
@@ -103,7 +104,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),*/
 };
 
-
 void keyboard_post_init_user(void) {
     debug_enable=true;
     //debug_matrix=true;
@@ -117,132 +117,44 @@ static uint8_t keys_tracker[MAX_WK];
 
 // todo: reset if layer is changed but trackers aren't clear
 // todo: tap dance to RESET
-// todo: will key wrapping messes up with tap dance?
-
-#define MAX_TAM_TAPS 3
-const uint16_t tam_mod_maps[MAX_TAM_TAPS+1] = {
-    [2] = KC_LCTL, // 2 taps
-    [3] = KC_LALT,  // 3 taps
-};
-
-typedef struct {
-    uint8_t count;
-    uint16_t timer;
-    bool finished;
-    bool pressed;
-    uint16_t keycode;
-} tap_auto_mod_state_t;
 
 
-static tap_auto_mod_state_t tam_state;
+void pre_register_key(tap_auto_mod_state_t *state) {
+    uint16_t current_wk = layers_to_kc[current_layer];
 
-const uint16_t term = 300;
-
-void tam_on_each(tap_auto_mod_state_t *state) {
-    uint8_t count = state->count;
-    dprintf("on each tap, count: %d\n\r", count);
-
-    if (state->count == MAX_TAM_TAPS) {
-        register_code16(tam_mod_maps[count]);
-        register_code16(state->keycode);
-        state->finished = true;
+    if (keys_tracker[current_layer] == 0) {
+        register_code(current_wk);
     }
+    keys_tracker[current_layer]++;
 }
 
-void tam_finished(tap_auto_mod_state_t *state) {
-    if (state->finished) return;
-    state->finished = true;
-    dprint("matrix_scan_tap_dance_user: tam finished\n\r");
+void post_unregister_key(tap_auto_mod_state_t *state) {
+    uint16_t current_wk = layers_to_kc[current_layer];
 
-    uint8_t count = state->count;
-
-    if (count > 1) {
-        register_code16(tam_mod_maps[count]);
-    }
-    register_code16(state->keycode);
-}
-
-void tam_reset(tap_auto_mod_state_t *state) {
-    if (state->pressed) return;
-    dprint("tam reset\n\r");
-    uint8_t count = state->count;
-
-    unregister_code16(state->keycode);
-    if (count > 1) {
-        unregister_code16(state->keycode);
-        unregister_code16(tam_mod_maps[count]);
-    }
-
-    state->count    = 0;
-    state->timer    = 0;
-    state->finished = false;
-    state->keycode  = 0;
-}
-
-bool process_tap_dance_user(uint16_t keycode, keyrecord_t *record) {
-    tam_state.pressed = record->event.pressed;
-    if (record->event.pressed) {
-        tam_state.count++;
-        tam_state.timer = timer_read();
-        tam_state.keycode = keycode;
-
-        tam_on_each(&tam_state);
-
-    } else {
-        if (tam_state.count > 0 && tam_state.finished) {
-            tam_reset(&tam_state);
-        }
-    }
-    return true;
-}
-
-void matrix_scan_tap_dance_user(void) {
-    if (tam_state.count > 0 && timer_elapsed(tam_state.timer) > term) {
-
-        tam_finished(&tam_state);
-        tam_reset(&tam_state);
+    keys_tracker[current_layer]--;
+    if (keys_tracker[current_layer] == 0) {
+         unregister_code(current_wk);
     }
 }
 
 void matrix_scan_user(void) {
-    matrix_scan_tap_dance_user();
+    matrix_scan_tam_user();
 }
 
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-
-    process_tap_dance_user(keycode, record);
-    return false;
-
     uint16_t current_wk = layers_to_kc[current_layer];
+
+    dprintf("layer %d | wk: %X | tracker: %d | keycode: 0x%02X\n", current_layer, current_wk, keys_tracker[current_layer], keycode);
 
     if (WK_0 <= keycode && keycode <= WK_4) {
         current_layer = keycode - WK_0;
-        // return false;
+        return false;
         // todo: tap a key?
-    } else if (KC_A <= keycode
-        && keycode <= KC_EXSEL
-        && keycode != current_wk) {
+    } else if (keycode != current_wk) {
+        process_tam_user(keycode, record);
 
-        if (record->event.pressed) {
-            if (keys_tracker[current_layer] == 0) {
-                // register_code(current_wk);
-            }
-            keys_tracker[current_layer]++;
-            // register_code(keycode);
-        } else {
-            // unregister_code(keycode);
-            keys_tracker[current_layer]--;
-            if (keys_tracker[current_layer] == 0) {
-                // unregister_code(current_wk);
-            }
-        }
-
-        dprintf("layer %d | wk: %X | tracker: %d | keycode: 0x%02X\n\r\n\r", current_layer, current_wk, keys_tracker[current_layer], keycode);
-        // return false;
+        return false;
     }
-
-    dprintf("layer %d | wk: %X | tracker: %d | keycode: 0x%02X\n\r\n\r", current_layer, current_wk, keys_tracker[current_layer], keycode);
     return true;
 }
-
