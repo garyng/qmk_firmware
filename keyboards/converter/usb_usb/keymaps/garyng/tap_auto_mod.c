@@ -57,8 +57,26 @@ void tam_reset(tap_auto_mod_state_t *state) {
     state->keycode  = 0;
 }
 
+void tam_handle_interruption(uint16_t keycode, keyrecord_t *record, tap_auto_mod_state_t *state) {
+    // if is key down
+    if (!record->event.pressed) return;
+
+    // if there is in flight key
+    if (state->count == 0) return;
+
+    // if the key is different
+    if (keycode == state->keycode) return;
+
+    dprintf("interrupted by %04X\r\n", keycode);
+
+    tam_finished(state);
+    // set it to key up otherwise reset won't run
+    state->pressed = false;
+    tam_reset(state);
+}
+
 void process_tam_user(uint16_t keycode, keyrecord_t *record) {
-    // todo: handle key interruption (might need multiple states...)
+    tam_handle_interruption(keycode, record, &tam_state);
 
     tam_state.pressed = record->event.pressed;
     if (record->event.pressed) {

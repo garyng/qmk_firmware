@@ -20,6 +20,7 @@ __attribute__((weak)) void post_unregister_key(tap_auto_mod_state_t *state);
 void tam_on_each(tap_auto_mod_state_t *state);
 void tam_finished(tap_auto_mod_state_t *state);
 void tam_reset(tap_auto_mod_state_t *state);
+void tam_handle_interruption(uint16_t keycode, keyrecord_t *record, tap_auto_mod_state_t *state);
 void process_tam_user(uint16_t keycode, keyrecord_t *record);
 void matrix_scan_tam_user(void);
 
