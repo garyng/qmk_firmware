@@ -1,6 +1,6 @@
 LTO_ENABLE = yes # reduces the compiled firmware size
 
-TAP_DANCE_ENABLE = yes
+TAP_DANCE_ENABLE = no
 EXTRAKEY_ENABLE = yes
 MOUSEKEY_ENABLE = no
 CONSOLE_ENABLE = yes

@@ -22,44 +22,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define MAX_WK 5
 
-enum Dances {
-    TD_HC
-};
-
-void td_each(qk_tap_dance_state_t *state, void *user_data) {
-   /* register_code(KC_F20);
-    if (state->count == 2) {
-        register_code(KC_LCTL);
-    }
-    register_code(KC_HOME);*/
-    dprint("td each\n\r");
-}
-
-void td_finished(qk_tap_dance_state_t *state, void *user_data) {
-    dprint("td finished\n\r");
-}
-
-
-void td_reset(qk_tap_dance_state_t *state, void *user_data) {
-   /* unregister_code(KC_HOME);
-
-    if (state->count == 2) {
-        unregister_code(KC_LCTL);
-    }
-     unregister_code(KC_F20);*/
-    dprint("td reset\n\r");
-}
-
-
-qk_tap_dance_action_t tap_dance_actions[] = {
-    [TD_HC] = ACTION_TAP_DANCE_FN_ADVANCED(td_each, td_finished, td_reset)
-};
-
-//qk_tap_dance_action_t tap_dance_actions[] = {
-//    [TD_HC] = ACTION_TAP_DANCE_DOUBLE(KC_HOME, C(KC_HOME))
-//};
-
-
 enum Layers {
     LAYER0 = 0,
     LAYER1,
@@ -123,7 +85,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                       KC_F13,  KC_F14,  KC_F15,  KC_F16, KC_F17, KC_F18, KC_F19,  KC_F20,  KC_F21,  KC_F22,  KC_F23,  KC_F24,
     WK_3,             KC_F1,   KC_F2,   KC_F3,   KC_F4,  KC_F5,  KC_F6,  KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,               KC_PSCR, KC_SLCK, KC_PAUS,    KC_VOLD, KC_VOLU, KC_MUTE, KC_PWR,     KC_HELP,
     KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,   KC_6,   KC_7,   KC_8,    KC_9,    KC_0,    KC_MINS, WK_1,    KC_JYEN, WK_0,        KC_INS,  KC_HOME, KC_PGUP,    KC_NLCK, KC_PSLS, KC_PAST, KC_PMNS,    KC_STOP, KC_AGIN,
-    WK_2,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,   KC_Y,   KC_U,   KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC,          KC_BSLS,     KC_DEL,  TD(TD_HC),  KC_PGDN,    KC_P7,   KC_P8,   KC_P9,   KC_PPLS,    KC_MENU, KC_UNDO,
+    WK_2,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,   KC_Y,   KC_U,   KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC,          KC_BSLS,     KC_DEL,  KC_END,  KC_PGDN,    KC_P7,   KC_P8,   KC_P9,   KC_PPLS,    KC_MENU, KC_UNDO,
     KC_CAPS, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,   KC_H,   KC_J,   KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_NUHS, KC_ENT,                                    KC_P4,   KC_P5,   KC_P6,   KC_PCMM,    KC_SLCT, KC_COPY,
     KC_LSFT, KC_NUBS, KC_Z,    KC_X,    KC_C,    KC_V,   KC_B,   KC_N,   KC_M,    KC_COMM, KC_DOT,  KC_SLSH,          KC_RO,   KC_RSFT,              KC_UP,               KC_P1,   KC_P2,   KC_P3,   KC_PEQL,    KC_EXEC, KC_PSTE,
     KC_LCTL, KC_LGUI, KC_LALT, KC_MHEN, KC_HANJ,         KC_SPC,         KC_HAEN, KC_HENK, KC_KANA, KC_RALT, KC_RGUI, KC_APP,  KC_RCTL,     KC_LEFT, KC_DOWN, KC_RGHT,    KC_P0,            KC_PDOT, KC_PENT,    KC_FIND, KC_CUT,
@@ -139,29 +101,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ______,  ______,  ______,  ______,  ______,         ______,           ______, ______,  ______, ______, ______, ______, ______,     ______,______,______,    ______,       ______,______,    ______,______,
     ______,  ______
     ),*/
-    // [LAYER2] = LAYOUT_all(
-    //                   ______,  ______,  ______, ______, ______,  ______,  ______, ______,  ______, ______, ______, ______,
-    // ______,           ______,  ______,  ______, ______, ______,  ______,  ______, ______,  ______, ______, ______, ______,             ______,______,______,    ______,______,______,______,    ______,
-    // ______,  ______,  ______,  ______,  ______, ______, ______,  ______,  ______, ______,  ______, ______, ______, ______, ______,     ______,______,______,    ______,______,______,______,    ______,______,
-    // ______,  ______,  ______,  ______,  ______, ______, ______,  ______,  ______, ______,  ______, ______, ______,         ______,     ______,______,______,    ______,______,______,______,    ______,______,
-    // ______,  ______,  ______,  ______,  ______, ______, ______,  ______,  ______, ______,  ______, ______,         ______, ______,                              ______,______,______,______,    ______,______,
-    // ______,  ______,  ______,  ______,  ______, ______, ______,  ______,  ______, ______,  ______, ______,         ______, ______,            ______,           ______,______,______,______,    ______,______,
-    // ______,  ______,  ______,  ______,  ______,         ______,           ______, ______,  ______, ______, ______, ______, ______,     ______,______,______,    ______,       ______,______,    ______,______
-    // ),
-    // [LAYER3] = LAYOUT_all(
-    //                   ______,  ______,  ______, ______, ______,  ______,  ______, ______,  ______, ______, ______, ______,
-    // ______,           ______,  ______,  ______, ______, ______,  ______,  ______, ______,  ______, ______, ______, ______,             ______,______,______,    ______,______,______,______,    ______,
-    // ______,  ______,  ______,  ______,  ______, ______, ______,  ______,  ______, ______,  ______, ______, ______, ______, ______,     ______,______,______,    ______,______,______,______,    ______,______,
-    // ______,  ______,  ______,  ______,  ______, ______, ______,  ______,  ______, ______,  ______, ______, ______,         ______,     ______,______,______,    ______,______,______,______,    ______,______,
-    // ______,  ______,  ______,  ______,  ______, ______, ______,  ______,  ______, ______,  ______, ______,         ______, ______,                              ______,______,______,______,    ______,______,
-    // ______,  ______,  ______,  ______,  ______, ______, ______,  ______,  ______, ______,  ______, ______,         ______, ______,            ______,           ______,______,______,______,    ______,______,
-    // ______,  ______,  ______,  ______,  ______,         ______,           ______, ______,  ______, ______, ______, ______, ______,     ______,______,______,    ______,       ______,______,    ______,______
-    // )
 };
 
 
 void keyboard_post_init_user(void) {
-    // Customise these values to desired behaviour
     debug_enable=true;
     //debug_matrix=true;
     //debug_keyboard=true;
@@ -169,7 +112,7 @@ void keyboard_post_init_user(void) {
 }
 
 static uint8_t current_layer = LAYER0;
-static uint8_t keys_tracker[MAX_WK];  // todo: need initialization?
+static uint8_t keys_tracker[MAX_WK];
 
 
 // todo: reset if layer is changed but trackers aren't clear
