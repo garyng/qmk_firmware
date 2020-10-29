@@ -77,7 +77,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     // numpad layout
     //  ,-----------. ,---------------.
-    //  |PrS|xxx|xxx| |Esc|Tab|  =|Bsp|
+    //  |PrS|Sch|Cal| |Esc|Tab|  =|Bsp|
     //  `-----------' `---------------'
     //  ,-----------. ,---------------.
     //  |NmL|Hom|PgU| | 00|  /|  *|  -|
