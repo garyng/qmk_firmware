@@ -75,7 +75,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * `-----------------------------------------------------------' `-----------' `---------------' `-------'
      */
 
-    // numpad layout
+    // 34 keys numpad layout
     //  ,-----------. ,---------------.
     //  |PrS|Sch|Cal| |Esc|Tab|  =|Bsp|
     //  `-----------' `---------------'
@@ -157,12 +157,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     if (WK_0 <= keycode && keycode <= WK_4) {
         current_layer = keycode - WK_0;
-         process_tam_user(wk_to_kc[keycode - WK_0], record);
+        process_tam_user(wk_to_kc[keycode - WK_0], record);
         return false;
-        // todo: tap a key?
     } else if (keycode != current_wk) {
         process_tam_user(keycode, record);
-
         return false;
     }
     return true;
