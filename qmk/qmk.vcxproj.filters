@@ -30,6 +30,9 @@
     <ClInclude Include="..\keyboards\converter\usb_usb\keymaps\garyng\tap_auto_mod.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\keyboards\converter\usb_usb\keymaps\garyng\wrapping_key.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\keyboards\converter\usb_usb\custom_matrix.cpp">
@@ -51,6 +54,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\keyboards\converter\usb_usb\keymaps\garyng\tap_auto_mod.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\keyboards\converter\usb_usb\keymaps\garyng\wrapping_key.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

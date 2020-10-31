@@ -23,6 +23,7 @@
     <ClInclude Include="..\keyboards\converter\usb_usb\HidGeneric.h" />
     <ClInclude Include="..\keyboards\converter\usb_usb\HidGenericReportParser.h" />
     <ClInclude Include="..\keyboards\converter\usb_usb\keymaps\garyng\tap_auto_mod.h" />
+    <ClInclude Include="..\keyboards\converter\usb_usb\keymaps\garyng\wrapping_key.h" />
     <ClInclude Include="..\keyboards\converter\usb_usb\usb_usb.h" />
   </ItemGroup>
   <ItemGroup>
@@ -30,6 +31,7 @@
     <ClCompile Include="..\keyboards\converter\usb_usb\HidGeneric.cpp" />
     <ClCompile Include="..\keyboards\converter\usb_usb\HidGenericReportParser.cpp" />
     <ClCompile Include="..\keyboards\converter\usb_usb\keymaps\garyng\tap_auto_mod.c" />
+    <ClCompile Include="..\keyboards\converter\usb_usb\keymaps\garyng\wrapping_key.c" />
     <ClCompile Include="..\keyboards\converter\usb_usb\main.c" />
     <ClCompile Include="..\keyboards\converter\usb_usb\matrix.c" />
     <ClCompile Include="..\keyboards\converter\usb_usb\usb_usb.c" />
