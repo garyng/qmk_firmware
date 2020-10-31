@@ -23,36 +23,33 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define MAX_WK 5
 
-enum Layers {
-    LAYER0 = 0,
-    LAYER1,
-    LAYER2,
-    LAYER3,
-    LAYER4
+// todo: will conflict with STENO_ENABLE
+#define QK_WRAPPING_KEY 0x5A00
+#define WK(index) (QK_WRAPPING_KEY | ((index)&0xFF))
+
+
+enum WrappingKeysIndexes {
+    WKI0,
+    WKI1,
+    WKI2,
+    WKI3,
+    WKI4
 };
 
-enum WrappingKeys {
-    WK_0 = SAFE_RANGE,
-    WK_1,
-    WK_2,
-    WK_3,
-    WK_4
+const uint16_t wki_to_wk[MAX_WK] = {
+    [WKI0] = KC_F13,
+    [WKI1] = KC_F14,
+    [WKI2] = KC_F15,
+    [WKI3] = KC_F16,
+    [WKI4] = KC_F17
 };
 
-const uint16_t layers_to_kc[MAX_WK] = {
-    [LAYER0] = KC_F13,
-    [LAYER1] = KC_F14,
-    [LAYER2] = KC_F15,
-    [LAYER3] = KC_F16,
-    [LAYER4] = KC_F17
-};
-
-const uint16_t wk_to_kc[MAX_WK] = {
-    [WK_0 - WK_0] = KC_BSPC,
-    [WK_1 - WK_0] = KC_EQUAL,
-    [WK_2 - WK_0] = KC_TAB,
-    [WK_3 - WK_0] = KC_ESC,
-    [WK_4 - WK_0] = KC_NO
+const uint16_t wki_to_kc[MAX_WK] = {
+    [WKI0] = KC_BSPC,
+    [WKI0] = KC_EQUAL,
+    [WKI0] = KC_TAB,
+    [WKI0] = KC_ESC,
+    [WKI0] = KC_NO
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -104,9 +101,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //  `-----------' `---------------'
     [0] = LAYOUT_all(
                       KC_F13,  KC_F14,  KC_F15,  KC_F16, KC_F17, KC_F18, KC_F19,  KC_F20,  KC_F21,  KC_F22,  KC_F23,  KC_F24,
-    WK_3,             KC_F1,   KC_F2,   KC_F3,   KC_F4,  KC_F5,  KC_F6,  KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,               KC_7,    KC_SLCK, KC_PAUS,    KC_VOLD, KC_VOLU, KC_MUTE, KC_PWR,     KC_HELP,
-    KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,   KC_6,   KC_7,   KC_8,    KC_9,    KC_0,    KC_MINS, WK_1,    KC_JYEN, WK_0,        KC_INS,  KC_5,    KC_6,       KC_4,    KC_PSLS, KC_PAST, KC_PMNS,    KC_STOP, KC_AGIN,
-    WK_2,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,   KC_Y,   KC_U,   KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC,          KC_BSLS,     KC_1,    KC_2,    KC_3,       KC_P7,   KC_P8,   KC_P9,   KC_PPLS,    KC_MENU, KC_UNDO,
+    WK(WKI3),         KC_F1,   KC_F2,   KC_F3,   KC_F4,  KC_F5,  KC_F6,  KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,               KC_7,    KC_SLCK, KC_PAUS,    KC_VOLD, KC_VOLU, KC_MUTE, KC_PWR,     KC_HELP,
+    KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,   KC_6,   KC_7,   KC_8,    KC_9,    KC_0,    KC_MINS, WK(WKI1),KC_JYEN, WK(WKI0),    KC_INS,  KC_5,    KC_6,       KC_4,    KC_PSLS, KC_PAST, KC_PMNS,    KC_STOP, KC_AGIN,
+    WK(WKI2),KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,   KC_Y,   KC_U,   KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC,          KC_BSLS,     KC_1,    KC_2,    KC_3,       KC_P7,   KC_P8,   KC_P9,   KC_PPLS,    KC_MENU, KC_UNDO,
     KC_CAPS, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,   KC_H,   KC_J,   KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_NUHS, KC_ENT,                                    KC_P4,   KC_P5,   KC_P6,   KC_PCMM,    KC_SLCT, KC_COPY,
     KC_LSFT, KC_NUBS, KC_Z,    KC_X,    KC_C,    KC_V,   KC_B,   KC_N,   KC_M,    KC_COMM, KC_DOT,  KC_SLSH,          KC_RO,   KC_RSFT,              KC_UP,               KC_P1,   KC_P2,   KC_P3,   KC_PEQL,    KC_EXEC, KC_PSTE,
     KC_LCTL, KC_LGUI, KC_LALT, KC_MHEN, KC_HANJ,         KC_SPC,         KC_HAEN, KC_HENK, KC_KANA, KC_RALT, KC_RGUI, KC_APP,  KC_RCTL,     KC_LEFT, KC_DOWN, KC_RGHT,    KC_P0,            KC_PDOT, KC_PENT,    KC_FIND, KC_CUT,
@@ -132,8 +129,8 @@ void keyboard_post_init_user(void) {
     //debug_mouse=true;
 }
 
-static uint8_t current_layer = LAYER0;
-static uint8_t keys_tracker[MAX_WK];
+static uint8_t current_wki = WKI0;
+static uint8_t wk_keys_tracker[MAX_WK];
 
 
 // todo: reset if layer is changed but trackers aren't clear
@@ -141,19 +138,19 @@ static uint8_t keys_tracker[MAX_WK];
 
 
 void pre_register_key(tap_auto_mod_state_t *state) {
-    uint16_t current_wk = layers_to_kc[current_layer];
+    uint16_t current_wk = wki_to_wk[current_wki];
 
-    if (keys_tracker[current_layer] == 0) {
+    if (wk_keys_tracker[current_wki] == 0) {
         register_code(current_wk);
     }
-    keys_tracker[current_layer]++;
+    wk_keys_tracker[current_wki]++;
 }
 
 void post_unregister_key(tap_auto_mod_state_t *state) {
-    uint16_t current_wk = layers_to_kc[current_layer];
+    uint16_t current_wk = wki_to_wk[current_wki];
 
-    keys_tracker[current_layer]--;
-    if (keys_tracker[current_layer] == 0) {
+    wk_keys_tracker[current_wki]--;
+    if (wk_keys_tracker[current_wki] == 0) {
          unregister_code(current_wk);
     }
 }
@@ -164,13 +161,14 @@ void matrix_scan_user(void) {
 
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    uint16_t current_wk = layers_to_kc[current_layer];
+    uint16_t current_wk = wki_to_wk[current_wki];
 
-    dprintf("layer %d | wk: %X | tracker: %d | keycode: 0x%02X\n", current_layer, current_wk, keys_tracker[current_layer], keycode);
+    dprintf("wki: %d | wk: %X | tracker: %d | keycode: 0x%02X\n", current_wki, current_wk, wk_keys_tracker[current_wki], keycode);
 
-    if (WK_0 <= keycode && keycode <= WK_4) {
-        current_layer = keycode - WK_0;
-        process_tam_user(wk_to_kc[keycode - WK_0], record);
+    if ((keycode & QK_WRAPPING_KEY) == QK_WRAPPING_KEY) {
+        current_wki = keycode - QK_WRAPPING_KEY;
+
+        process_tam_user(wki_to_kc[current_wki], record);
         return false;
     } else if (keycode != current_wk) {
         process_tam_user(keycode, record);
