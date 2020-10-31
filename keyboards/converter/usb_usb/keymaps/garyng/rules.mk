@@ -7,4 +7,4 @@ CONSOLE_ENABLE = yes
 COMMAND_ENABLE = no
 NKRO_ENABLE = no
 
-SRC += tap_auto_mod.c
+SRC += tap_auto_mod.c wrapping_key.c

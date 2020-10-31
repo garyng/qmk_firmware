@@ -20,16 +20,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdlib.h>
 #include <print.h>
 #include "tap_auto_mod.h"
-
-#define MAX_WK 5
-
-// todo: will conflict with STENO_ENABLE
-#define QK_WRAPPING_KEY 0x5A00
-#define WK(index) (QK_WRAPPING_KEY | ((index)&0xFF))
-
+#include "wrapping_key.h"
 
 enum WrappingKeysIndexes {
-    WKI0,
+    WKI0 = 0,
     WKI1,
     WKI2,
     WKI3,
@@ -46,10 +40,10 @@ const uint16_t wki_to_wk[MAX_WK] = {
 
 const uint16_t wki_to_kc[MAX_WK] = {
     [WKI0] = KC_BSPC,
-    [WKI0] = KC_EQUAL,
-    [WKI0] = KC_TAB,
-    [WKI0] = KC_ESC,
-    [WKI0] = KC_NO
+    [WKI1] = KC_EQUAL,
+    [WKI2] = KC_TAB,
+    [WKI3] = KC_ESC,
+    [WKI4] = KC_NO
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -129,31 +123,8 @@ void keyboard_post_init_user(void) {
     //debug_mouse=true;
 }
 
-static uint8_t current_wki = WKI0;
-static uint8_t wk_keys_tracker[MAX_WK];
-
-
 // todo: reset if layer is changed but trackers aren't clear
 // todo: tap dance to RESET
-
-
-void pre_register_key(tap_auto_mod_state_t *state) {
-    uint16_t current_wk = wki_to_wk[current_wki];
-
-    if (wk_keys_tracker[current_wki] == 0) {
-        register_code(current_wk);
-    }
-    wk_keys_tracker[current_wki]++;
-}
-
-void post_unregister_key(tap_auto_mod_state_t *state) {
-    uint16_t current_wk = wki_to_wk[current_wki];
-
-    wk_keys_tracker[current_wki]--;
-    if (wk_keys_tracker[current_wki] == 0) {
-         unregister_code(current_wk);
-    }
-}
 
 void matrix_scan_user(void) {
     matrix_scan_tam_user();
@@ -161,18 +132,7 @@ void matrix_scan_user(void) {
 
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    uint16_t current_wk = wki_to_wk[current_wki];
 
-    dprintf("wki: %d | wk: %X | tracker: %d | keycode: 0x%02X\n", current_wki, current_wk, wk_keys_tracker[current_wki], keycode);
-
-    if ((keycode & QK_WRAPPING_KEY) == QK_WRAPPING_KEY) {
-        current_wki = keycode - QK_WRAPPING_KEY;
-
-        process_tam_user(wki_to_kc[current_wki], record);
-        return false;
-    } else if (keycode != current_wk) {
-        process_tam_user(keycode, record);
-        return false;
-    }
-    return true;
+    dprintf("keycode: 0x%02X\n", keycode);
+    return process_wk_user(keycode, record);    
 }
