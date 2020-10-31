@@ -1,4 +1,6 @@
-/* Copyright 2019 HnahKB
+/* Copyright 2020 Christopher Courtney, aka Drashna Jael're  (@drashna) <drashna@live.com>
+ * Copyright 2019 Sunjun Kim
+ * Copyright 2020 Ploopy Corporation
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,4 +18,4 @@
 
 #pragma once
 
-// place overrides here
+#define DYNAMIC_KEYMAP_LAYER_COUNT 8
