@@ -7,19 +7,20 @@ USB_HID_DIR = protocol/usb_hid
 USB_HOST_SHIELD_DIR = $(USB_HID_DIR)/USB_Host_Shield_2.0
 USB_HOST_SHIELD_SRC = \
 	$(USB_HOST_SHIELD_DIR)/Usb.cpp \
-	$(USB_HOST_SHIELD_DIR)/hid.cpp \
+	$(USB_HOST_SHIELD_DIR)/usbhid.cpp \
 	$(USB_HOST_SHIELD_DIR)/usbhub.cpp \
 	$(USB_HOST_SHIELD_DIR)/parsetools.cpp \
-	$(USB_HOST_SHIELD_DIR)/message.cpp 
+	$(USB_HOST_SHIELD_DIR)/message.cpp
 
 
 
 #
 # Arduino
 #
-ARDUINO_DIR = $(USB_HID_DIR)/arduino-1.0.1
+ARDUINO_DIR = $(USB_HID_DIR)/arduino-1.8.3
 ARDUINO_CORES_DIR = $(ARDUINO_DIR)/cores/arduino
 ARDUINO_CORES_SRC = \
+	$(ARDUINO_CORES_DIR)/abi.cpp \
 	$(ARDUINO_CORES_DIR)/Print.cpp \
 	$(ARDUINO_CORES_DIR)/Stream.cpp
 

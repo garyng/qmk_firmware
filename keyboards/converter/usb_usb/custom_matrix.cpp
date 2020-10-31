@@ -21,20 +21,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // USB HID host
 #include "Usb.h"
 #include "usbhub.h"
-#include "hid.h"
-#include "hidboot.h"
-#include "parser.h"
 
 #include "keycode.h"
 #include "util.h"
 #include "print.h"
 #include "debug.h"
+#include "HidGeneric.h"
 #include "timer.h"
 #include "matrix.h"
 #include "led.h"
 #include "host.h"
 #include "keyboard.h"
-
 extern "C" {
 #include "quantum.h"
 }
@@ -62,6 +59,7 @@ extern "C" {
 #define ROW(code)       (((code) & ROW_MASK) >> 4)
 #define COL(code)       ((code) & COL_MASK)
 #define ROW_BITS(code)  (1 << COL(code))
+#define MAX_KEYBOARDS 4
 
 
 // Integrated key state of all keyboards
@@ -73,31 +71,29 @@ static bool matrix_is_mod = false;
  * USB Host Shield HID keyboards
  * This supports two cascaded hubs and four keyboards
  */
-USB usb_host;
-HIDBoot<HID_PROTOCOL_KEYBOARD>    kbd1(&usb_host);
-HIDBoot<HID_PROTOCOL_KEYBOARD>    kbd2(&usb_host);
-HIDBoot<HID_PROTOCOL_KEYBOARD>    kbd3(&usb_host);
-HIDBoot<HID_PROTOCOL_KEYBOARD>    kbd4(&usb_host);
-KBDReportParser kbd_parser1;
-KBDReportParser kbd_parser2;
-KBDReportParser kbd_parser3;
-KBDReportParser kbd_parser4;
+USB    usb_host;
 USBHub hub1(&usb_host);
 USBHub hub2(&usb_host);
 
+HidGeneric keyboards[MAX_KEYBOARDS] = {HidGeneric(&usb_host), HidGeneric(&usb_host), HidGeneric(&usb_host), HidGeneric(&usb_host)};
+HidGenericReportParser parsers[MAX_KEYBOARDS];
+uint16_t               last_time_stamps[MAX_KEYBOARDS];
 
 extern "C"
 {
     uint8_t matrix_rows(void) { return MATRIX_ROWS; }
     uint8_t matrix_cols(void) { return MATRIX_COLS; }
     bool matrix_has_ghost(void) { return false; }
+
     void matrix_init(void) {
         // USB Host Shield setup
         usb_host.Init();
-        kbd1.SetReportParser(0, (HIDReportParser*)&kbd_parser1);
-        kbd2.SetReportParser(0, (HIDReportParser*)&kbd_parser2);
-        kbd3.SetReportParser(0, (HIDReportParser*)&kbd_parser3);
-        kbd4.SetReportParser(0, (HIDReportParser*)&kbd_parser4);
+
+        // Initialize keyboard report parsers
+        for (int i = 0; i < MAX_KEYBOARDS; ++i) {
+            keyboards[i].SetReportParser(&parsers[i]);
+        }
+
         matrix_init_quantum();
     }
 
@@ -134,30 +130,12 @@ extern "C"
     void matrix_scan_user(void) {
     }
 
-    uint8_t matrix_scan(void) {
-        static uint16_t last_time_stamp1 = 0;
-        static uint16_t last_time_stamp2 = 0;
-        static uint16_t last_time_stamp3 = 0;
-        static uint16_t last_time_stamp4 = 0;
+    void update_keyboard_report(int i) {
+        if (parsers[i].time_stamp != last_time_stamps[i]) {
+            last_time_stamps[i] = parsers[i].time_stamp;
 
-        // check report came from keyboards
-        if (kbd_parser1.time_stamp != last_time_stamp1 ||
-            kbd_parser2.time_stamp != last_time_stamp2 ||
-            kbd_parser3.time_stamp != last_time_stamp3 ||
-            kbd_parser4.time_stamp != last_time_stamp4) {
-
-            last_time_stamp1 = kbd_parser1.time_stamp;
-            last_time_stamp2 = kbd_parser2.time_stamp;
-            last_time_stamp3 = kbd_parser3.time_stamp;
-            last_time_stamp4 = kbd_parser4.time_stamp;
-
-            // clear and integrate all reports
             local_keyboard_report = {};
-            or_report(kbd_parser1.report);
-            or_report(kbd_parser2.report);
-            or_report(kbd_parser3.report);
-            or_report(kbd_parser4.report);
-
+            or_report(parsers[i].report);
             matrix_is_mod = true;
 
             dprintf("state:  %02X %02X", local_keyboard_report.mods, local_keyboard_report.reserved);
@@ -167,6 +145,12 @@ extern "C"
             dprint("\r\n");
         } else {
             matrix_is_mod = false;
+        }
+    }
+
+    uint8_t matrix_scan(void) {
+        for (int i = 0; i < MAX_KEYBOARDS; ++i) {
+            update_keyboard_report(i);
         }
 
         uint16_t timer;
@@ -250,12 +234,11 @@ extern "C"
         }
     }
 
-    void led_set(uint8_t usb_led)
-    {
-        if (kbd1.isReady()) kbd1.SetReport(0, 0, 2, 0, 1, &usb_led);
-        if (kbd2.isReady()) kbd2.SetReport(0, 0, 2, 0, 1, &usb_led);
-        if (kbd3.isReady()) kbd3.SetReport(0, 0, 2, 0, 1, &usb_led);
-        if (kbd4.isReady()) kbd4.SetReport(0, 0, 2, 0, 1, &usb_led);
+    void led_set(uint8_t usb_led) {
+        for (int i = 0; i < MAX_KEYBOARDS; ++i) {
+            if (keyboards[i].isReady()) keyboards[i].SetReport(0, 0, 2, 0, 1, &usb_led);
+        }
+
         led_set_kb(usb_led);
     }
 

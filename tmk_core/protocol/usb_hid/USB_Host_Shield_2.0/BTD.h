@@ -19,7 +19,7 @@
 #define _btd_h_
 
 #include "Usb.h"
-#include "hid.h"
+#include "usbhid.h"
 
 //PID and VID of the Sony PS3 devices
 #define PS3_VID                 0x054C  // Sony Corporation
@@ -27,8 +27,11 @@
 #define PS3NAVIGATION_PID       0x042F  // Navigation controller
 #define PS3MOVE_PID             0x03D5  // Motion controller
 
-#define IOGEAR_GBU521_VID       0x0A5C // The IOGEAR GBU521 dongle does not presents itself correctly, so we have to check for it manually
+// These dongles do not present themselves correctly, so we have to check for them manually
+#define IOGEAR_GBU521_VID       0x0A5C
 #define IOGEAR_GBU521_PID       0x21E8
+#define BELKIN_F8T065BF_VID     0x050D
+#define BELKIN_F8T065BF_PID     0x065A
 
 /* Bluetooth dongle data taken from descriptors */
 #define BULK_MAXPKTSIZE         64 // Max size for ACL data
@@ -264,7 +267,7 @@ public:
          * @return     Returns true if the device's VID and PID matches this driver.
          */
         virtual bool VIDPIDOK(uint16_t vid, uint16_t pid) {
-                if(vid == IOGEAR_GBU521_VID && pid == IOGEAR_GBU521_PID)
+                if((vid == IOGEAR_GBU521_VID && pid == IOGEAR_GBU521_PID) || (vid == BELKIN_F8T065BF_VID && pid == BELKIN_F8T065BF_PID))
                         return true;
                 if(my_bdaddr[0] != 0x00 || my_bdaddr[1] != 0x00 || my_bdaddr[2] != 0x00 || my_bdaddr[3] != 0x00 || my_bdaddr[4] != 0x00 || my_bdaddr[5] != 0x00) { // Check if Bluetooth address is set
                         if(vid == PS3_VID && (pid == PS3_PID || pid == PS3NAVIGATION_PID || pid == PS3MOVE_PID))
@@ -432,7 +435,7 @@ public:
         /**@}*/
 
         /** Use this to see if it is waiting for a incoming connection. */
-        bool watingForConnection;
+        bool waitingForConnection;
         /** This is used by the service to know when to store the device information. */
         bool l2capConnectionClaimed;
         /** This is used by the SPP library to claim the current SDP incoming request. */
@@ -476,14 +479,15 @@ public:
         /** True if it's a Wii U Pro Controller. */
         bool wiiUProController;
 
-        /** Call this function to pair with a Wiimote */
+        /** Call this function to pair with a HID device */
         void pairWithHID() {
+                waitingForConnection = false;
                 pairWithHIDDevice = true;
                 hci_state = HCI_CHECK_DEVICE_SERVICE;
         };
-        /** Used to only send the ACL data to the Wiimote. */
+        /** Used to only send the ACL data to the HID device. */
         bool connectToHIDDevice;
-        /** True if a Wiimote is connecting. */
+        /** True if a HID device is connecting. */
         bool incomingHIDDevice;
         /** True when it should pair with a device like a mouse or keyboard. */
         bool pairWithHIDDevice;
@@ -535,7 +539,7 @@ private:
         uint8_t pollInterval;
         bool bPollEnable;
 
-        bool pairWiiUsingSync; // True if paring was done using the Wii SYNC button.
+        bool pairWiiUsingSync; // True if pairing was done using the Wii SYNC button.
         bool checkRemoteName; // Used to check remote device's name before connecting.
         bool incomingPS4; // True if a PS4 controller is connecting
         uint8_t classOfDevice[3]; // Class of device of last device
