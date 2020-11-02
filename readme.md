@@ -1,3 +1,31 @@
+# `garyng/qmk_firmware`
+
+My personal fork of [`qmk_firmware`](https://github.com/qmk/qmk_firmware) with some additional features.
+
+> `master` is kept updated using [`wei/pull`](https://github.com/wei/pull).
+
+# Additional Features
+
+> Most of the features here are used with [`garyng/ahk-utilities`](https://github.com/garyng/ahk-utilities).
+
+## HidGeneric
+
+Extends [Hasu USB-USB Converter](https://geekhack.org/index.php?topic=69169.0)'s firmware to allow user to implement their own HID report parser. This is used for recognizing media keys on keyboards since they are ignored by the original firmware of the converter.
+
+> Thanks to [@fauxpark](https://github.com/fauxpark) on QMK Discord server and [hasu@tmk](https://github.com/tmk) for helping!
+
+## Wrapping Key
+
+A key that acts like a layer switching key, but instead of switching layers, it will switch the "wrapping key", `wk`. A wrapping key is a key that wraps all other keys. For example, if you pressed `kc`, it will wrap it and send `<wk down> <kc1> <kc2> <wk up>` instead.
+
+## Tap Auto Mod
+
+This is a combination of QMK's [Tap Dance](https://beta.docs.qmk.fm/using-qmk/software-features/feature_tap_dance) and [Auto Shift](https://beta.docs.qmk.fm/using-qmk/software-features/feature_auto_shift) with a much simplified implementation.
+
+Depends on the configuration, it will send different `<mod>` with the original `<kc>` based on how many times you tapped the key. For example, tap twice to send `Ctrl + <kc>` and tap thrice to send `Alt + <kc>`.
+
+---
+
 # Quantum Mechanical Keyboard Firmware
 
 [![Current Version](https://img.shields.io/github/tag/qmk/qmk_firmware.svg)](https://github.com/qmk/qmk_firmware/tags)
