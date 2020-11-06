@@ -22,6 +22,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "tap_auto_mod.h"
 #include "wrapping_key.h"
 
+const uint16_t tam_mod_maps[MAX_TAM_TAPS + 1] = {
+    [2] = KC_LCTL,  // 2 taps
+    [3] = KC_LALT,  // 3 taps
+};
+
 enum WrappingKeysIndexes {
     WKI0 = 0,
     WKI1,
