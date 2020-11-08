@@ -19,21 +19,15 @@ const uint16_t wki_to_kc[MAX_WK] = {
 
 #endif
 
-#ifndef NO_WK_TIMEOUT
-
-#    ifndef WK_TIMEOUT
-#        define WK_TIMEOUT 2000
-#    endif
-
+#ifdef WK_TIMEOUT
 static uint16_t timeout_timer = 0;
-
 #endif
 
 static uint8_t current_wki = 0;
 static uint8_t wk_keys_tracker[MAX_WK];
 
 void update_timeout_timer(void) {
-#ifndef NO_WK_TIMEOUT
+#ifdef WK_TIMEOUT
     if (current_wki != default_wki) {
         timeout_timer = timer_read();
     }
@@ -73,8 +67,7 @@ void tap_wk_kc(void) {
 }
 
 void matrix_scan_wk_user(void) {
-#ifndef NO_WK_TIMEOUT
-    // todo: per key timeout?
+#ifdef WK_TIMEOUT
     if (current_wki != default_wki && timer_elapsed(timeout_timer) > WK_TIMEOUT) {
         dprintf("wki reset to %d", default_wki);
         current_wki   = default_wki;

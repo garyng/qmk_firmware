@@ -9,7 +9,8 @@
 extern const uint16_t wki_to_wk[];
 extern const uint16_t wki_to_kc[];
 
-#ifndef NO_WK_TIMEOUT
+
+#ifdef WK_TIMEOUT
 extern const uint8_t default_wki;
 #endif
 
