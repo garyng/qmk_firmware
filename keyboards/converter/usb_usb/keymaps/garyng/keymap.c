@@ -22,6 +22,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "tap_auto_mod.h"
 #include "wrapping_key.h"
 
+const uint8_t default_wki = 0;
+
 const uint16_t tam_mod_maps[MAX_TAM_TAPS + 1] = {
     [2] = KC_LCTL,  // 2 taps
     [3] = KC_LALT,  // 3 taps
@@ -132,6 +134,7 @@ void keyboard_post_init_user(void) {
 // todo: tap dance to RESET
 
 void matrix_scan_user(void) {
+    matrix_scan_wk_user();
     matrix_scan_tam_user();
 }
 
