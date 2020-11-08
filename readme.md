@@ -22,6 +22,8 @@ Extends [Hasu USB-USB Converter](https://geekhack.org/index.php?topic=69169.0)'s
 
 A key that acts like a layer switching key, but instead of switching layers, it will switch the "wrapping key", `wk`. A wrapping key is a key that wraps all other keys. For example, if you pressed `kc`, it will wrap it and send `<wk down> <kc> <wk up>` instead.
 
+You can also set a timeout so that it would automatically reset back to the default `wk` ([guide](#wrapping-key-timeout)).
+
 ### Tap Auto Mod
 
 > [`tap_auto_mod.c`](https://github.com/garyng/qmk_firmware/blob/6a724277c0a98414949ef96405a133635ac50286/keyboards/converter/usb_usb/keymaps/garyng/tap_auto_mod.c)
@@ -78,6 +80,11 @@ By default unrecognized keys are ignored by the USB-USB converter, you need to a
 1. Populate `wki_to_wk` (maps index to the wrapping key) and `wki_to_kc` (maps wrapping key to the original key code) [(example)](https://github.com/garyng/qmk_firmware/blob/6a724277c0a98414949ef96405a133635ac50286/keyboards/converter/usb_usb/keymaps/garyng/keymap.c#L33-L47)
 1. Wrap your `wki` with `WK` macro inside your layout [(example)](https://github.com/garyng/qmk_firmware/blob/6a724277c0a98414949ef96405a133635ac50286/keyboards/converter/usb_usb/keymaps/garyng/keymap.c#L98).
 1. Call `process_wk_user` inside `process_record_user` [(example)](https://github.com/garyng/qmk_firmware/blob/6a724277c0a98414949ef96405a133635ac50286/keyboards/converter/usb_usb/keymaps/garyng/keymap.c#L134-L138).
+
+### Wrapping key timeout
+
+1. `#define WK_TIMEOUT` in `config.h` to specify the timeout (in milliseconds) [(example)](https://github.com/garyng/qmk_firmware/blob/7db018cedb99a6aa8ba803cbb7a681dc0e9fc40d/keyboards/converter/usb_usb/keymaps/garyng/config.h#L14)
+1. Initialize `default_wki` inside `keymap.c` with the default `wk` index [(example)](https://github.com/garyng/qmk_firmware/blob/7db018cedb99a6aa8ba803cbb7a681dc0e9fc40d/keyboards/converter/usb_usb/keymaps/garyng/keymap.c#L25)
 
 ## Using Tap Auto Mod
 
