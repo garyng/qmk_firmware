@@ -122,25 +122,3 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ______,  ______
     ),*/
 };
-
-void keyboard_post_init_user(void) {
-    debug_enable=true;
-    //debug_matrix=true;
-    //debug_keyboard=true;
-    //debug_mouse=true;
-}
-
-// todo: reset if layer is changed but trackers aren't clear
-// todo: tap dance to RESET
-
-void matrix_scan_user(void) {
-    matrix_scan_wk_user();
-    matrix_scan_tam_user();
-}
-
-
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-
-    dprintf("keycode: 0x%02X\n", keycode);
-    return process_wk_user(keycode, record);    
-}
