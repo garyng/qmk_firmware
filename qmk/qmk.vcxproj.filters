@@ -13,12 +13,27 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\usb_usb">
+      <UniqueIdentifier>{610e4a2f-c683-4cce-974a-23e9facc2e02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\garyng">
+      <UniqueIdentifier>{5f18790b-b023-43a6-b0fb-dfc7aff07551}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\keymaps">
+      <UniqueIdentifier>{8fc0ceeb-fef2-4334-8089-735c8d8b6b16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\keymaps\hasu">
+      <UniqueIdentifier>{c2e03efa-0aaa-4d24-91e2-5d87f9539ace}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\keymaps\hasu2">
+      <UniqueIdentifier>{48bc148c-68cc-4e94-a5a2-a2d76d4224ab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\keyboards\converter\usb_usb\config.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\keyboards\converter\usb_usb\hasu2\keymaps\garyng\config.h">
+      <Filter>Source Files\keymaps\hasu2</Filter>
     </ClInclude>
-    <ClInclude Include="..\keyboards\converter\usb_usb\usb_usb.h">
+    <ClInclude Include="..\keyboards\converter\usb_usb\config.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\keyboards\converter\usb_usb\HidGeneric.h">
@@ -27,42 +42,66 @@
     <ClInclude Include="..\keyboards\converter\usb_usb\HidGenericReportParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\keyboards\converter\usb_usb\keymaps\garyng\tap_auto_mod.h">
+    <ClInclude Include="..\keyboards\converter\usb_usb\usb_usb.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\keyboards\converter\usb_usb\keymaps\garyng\wrapping_key.h">
+    <ClInclude Include="..\users\garyng\tap_auto_mod.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\users\garyng\wrapping_key.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\keyboards\converter\usb_usb\hasu\keymaps\garyng\config.h">
+      <Filter>Source Files\keymaps\hasu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\users\garyng\config.h">
+      <Filter>Source Files\garyng</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\keyboards\converter\usb_usb\custom_matrix.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\keyboards\converter\usb_usb\main.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\keyboards\converter\usb_usb\matrix.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\keyboards\converter\usb_usb\usb_usb.c">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\keyboards\converter\usb_usb\HidGenericReportParser.cpp">
+      <Filter>Source Files\usb_usb</Filter>
     </ClCompile>
     <ClCompile Include="..\keyboards\converter\usb_usb\HidGeneric.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\usb_usb</Filter>
     </ClCompile>
-    <ClCompile Include="..\keyboards\converter\usb_usb\HidGenericReportParser.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\keyboards\converter\usb_usb\custom_matrix.cpp">
+      <Filter>Source Files\usb_usb</Filter>
     </ClCompile>
-    <ClCompile Include="..\keyboards\converter\usb_usb\keymaps\garyng\tap_auto_mod.c">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\keyboards\converter\usb_usb\usb_usb.c">
+      <Filter>Source Files\usb_usb</Filter>
     </ClCompile>
-    <ClCompile Include="..\keyboards\converter\usb_usb\keymaps\garyng\wrapping_key.c">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\keyboards\converter\usb_usb\matrix.c">
+      <Filter>Source Files\usb_usb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\keyboards\converter\usb_usb\main.c">
+      <Filter>Source Files\usb_usb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\users\garyng\wrapping_key.c">
+      <Filter>Source Files\garyng</Filter>
+    </ClCompile>
+    <ClCompile Include="..\users\garyng\tap_auto_mod.c">
+      <Filter>Source Files\garyng</Filter>
+    </ClCompile>
+    <ClCompile Include="..\keyboards\converter\usb_usb\hasu2\keymaps\garyng\keymap.c">
+      <Filter>Source Files\keymaps\hasu2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\users\garyng\garyng.c">
+      <Filter>Source Files\garyng</Filter>
+    </ClCompile>
+    <ClCompile Include="..\keyboards\converter\usb_usb\hasu\keymaps\garyng\keymap.c">
+      <Filter>Source Files\keymaps\hasu</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\keyboards\converter\usb_usb\info.json" />
     <None Include="..\keyboards\converter\usb_usb\readme.md" />
     <None Include="..\keyboards\converter\usb_usb\rules.mk" />
+    <None Include="..\keyboards\converter\usb_usb\hasu\keymaps\garyng\rules.mk">
+      <Filter>Source Files\keymaps\hasu</Filter>
+    </None>
+    <None Include="..\keyboards\converter\usb_usb\hasu2\keymaps\garyng\rules.mk">
+      <Filter>Source Files\keymaps\hasu2</Filter>
+    </None>
   </ItemGroup>
 </Project>
