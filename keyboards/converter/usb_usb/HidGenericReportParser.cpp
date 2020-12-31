@@ -69,6 +69,10 @@ void HidGenericReportParser::Parse(uint16_t vid, uint16_t pid, uint8_t iface, ui
         // logitech unifying receiver
     }
 
+    if (vid == 0x04B4 && pid == 0x3000) {
+        // ajazz
+    }
+
     if (iface == 0 && endpoint == 1) {
         // seems like most keyboards send normal keys via this endpoint
         ::memcpy(&report, buff, sizeof(report_keyboard_t));
