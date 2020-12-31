@@ -119,7 +119,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\..\;$(SolutionDir)\..\quantum\;$(SolutionDir)\..\tmk_core\common\;$(SolutionDir)\..\tmk_core\protocol\usb_hid\USB_Host_Shield_2.0\;$(SolutionDir)\..\tmk_core\protocol\usb_hid\;$(SolutionDir)\..\lib\lufa\;$(SolutionDir)\..\quantum\audio\;$(SolutionDir)\..\quantum\process_keycode\;$(SolutionDir)\..\drivers\avr\;$(SolutionDir)\..\lib\chibios\;$(SolutionDir)\..\users\garyng\;$(SolutionDir)\..\keyboards\converter\usb_usb\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\;$(SolutionDir)\..\quantum\;$(SolutionDir)\..\tmk_core\common\;$(SolutionDir)\..\tmk_core\protocol\usb_hid\USB_Host_Shield_2.0-tmk\;$(SolutionDir)\..\tmk_core\protocol\usb_hid\;$(SolutionDir)\..\lib\lufa\;$(SolutionDir)\..\quantum\audio\;$(SolutionDir)\..\quantum\process_keycode\;$(SolutionDir)\..\drivers\avr\;$(SolutionDir)\..\lib\chibios\;$(SolutionDir)\..\users\garyng\;$(SolutionDir)\..\keyboards\converter\usb_usb\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -134,7 +134,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\..\;$(SolutionDir)\..\quantum\;$(SolutionDir)\..\tmk_core\common\;$(SolutionDir)\..\tmk_core\protocol\usb_hid\USB_Host_Shield_2.0\;$(SolutionDir)\..\tmk_core\protocol\usb_hid\;$(SolutionDir)\..\lib\lufa\;$(SolutionDir)\..\quantum\audio\;$(SolutionDir)\..\quantum\process_keycode\;$(SolutionDir)\..\drivers\avr\;$(SolutionDir)\..\lib\chibios\;$(SolutionDir)\..\users\garyng\;$(SolutionDir)\..\keyboards\converter\usb_usb\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\;$(SolutionDir)\..\quantum\;$(SolutionDir)\..\tmk_core\common\;$(SolutionDir)\..\tmk_core\protocol\usb_hid\USB_Host_Shield_2.0-tmk\;$(SolutionDir)\..\tmk_core\protocol\usb_hid\;$(SolutionDir)\..\lib\lufa\;$(SolutionDir)\..\quantum\audio\;$(SolutionDir)\..\quantum\process_keycode\;$(SolutionDir)\..\drivers\avr\;$(SolutionDir)\..\lib\chibios\;$(SolutionDir)\..\users\garyng\;$(SolutionDir)\..\keyboards\converter\usb_usb\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
