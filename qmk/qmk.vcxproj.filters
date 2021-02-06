@@ -57,6 +57,9 @@
     <ClInclude Include="..\users\garyng\config.h">
       <Filter>Source Files\garyng</Filter>
     </ClInclude>
+    <ClInclude Include="..\keyboards\converter\usb_usb\teensy_2pp\keymaps\garyng\config.h">
+      <Filter>Source Files\keymaps</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\keyboards\converter\usb_usb\HidGenericReportParser.cpp">
@@ -92,6 +95,9 @@
     <ClCompile Include="..\keyboards\converter\usb_usb\hasu\keymaps\garyng\keymap.c">
       <Filter>Source Files\keymaps\hasu</Filter>
     </ClCompile>
+    <ClCompile Include="..\keyboards\converter\usb_usb\teensy_2pp\keymaps\garyng\keymap.c">
+      <Filter>Source Files\keymaps</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\keyboards\converter\usb_usb\info.json" />
@@ -102,6 +108,9 @@
     </None>
     <None Include="..\keyboards\converter\usb_usb\hasu2\keymaps\garyng\rules.mk">
       <Filter>Source Files\keymaps\hasu2</Filter>
+    </None>
+    <None Include="..\keyboards\converter\usb_usb\teensy_2pp\keymaps\garyng\rules.mk">
+      <Filter>Source Files\keymaps</Filter>
     </None>
   </ItemGroup>
 </Project>

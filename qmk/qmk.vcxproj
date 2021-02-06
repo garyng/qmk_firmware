@@ -24,6 +24,7 @@
     <ClInclude Include="..\keyboards\converter\usb_usb\hasu\keymaps\garyng\config.h" />
     <ClInclude Include="..\keyboards\converter\usb_usb\HidGeneric.h" />
     <ClInclude Include="..\keyboards\converter\usb_usb\HidGenericReportParser.h" />
+    <ClInclude Include="..\keyboards\converter\usb_usb\teensy_2pp\keymaps\garyng\config.h" />
     <ClInclude Include="..\keyboards\converter\usb_usb\usb_usb.h" />
     <ClInclude Include="..\users\garyng\config.h" />
     <ClInclude Include="..\users\garyng\tap_auto_mod.h" />
@@ -37,6 +38,7 @@
     <ClCompile Include="..\keyboards\converter\usb_usb\HidGenericReportParser.cpp" />
     <ClCompile Include="..\keyboards\converter\usb_usb\main.c" />
     <ClCompile Include="..\keyboards\converter\usb_usb\matrix.c" />
+    <ClCompile Include="..\keyboards\converter\usb_usb\teensy_2pp\keymaps\garyng\keymap.c" />
     <ClCompile Include="..\keyboards\converter\usb_usb\usb_usb.c" />
     <ClCompile Include="..\users\garyng\garyng.c" />
     <ClCompile Include="..\users\garyng\tap_auto_mod.c" />
@@ -48,6 +50,7 @@
     <None Include="..\keyboards\converter\usb_usb\info.json" />
     <None Include="..\keyboards\converter\usb_usb\readme.md" />
     <None Include="..\keyboards\converter\usb_usb\rules.mk" />
+    <None Include="..\keyboards\converter\usb_usb\teensy_2pp\keymaps\garyng\rules.mk" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -119,7 +122,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\..\;$(SolutionDir)\..\quantum\;$(SolutionDir)\..\tmk_core\common\;$(SolutionDir)\..\tmk_core\protocol\usb_hid\USB_Host_Shield_2.0-tmk\;$(SolutionDir)\..\tmk_core\protocol\usb_hid\;$(SolutionDir)\..\lib\lufa\;$(SolutionDir)\..\quantum\audio\;$(SolutionDir)\..\quantum\process_keycode\;$(SolutionDir)\..\drivers\avr\;$(SolutionDir)\..\lib\chibios\;$(SolutionDir)\..\users\garyng\;$(SolutionDir)\..\keyboards\converter\usb_usb\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\users\garyng\;$(SolutionDir)\..\keyboards\converter\usb_usb\;$(SolutionDir)\..\;$(SolutionDir)\..\quantum\;$(SolutionDir)\..\tmk_core\common\;$(SolutionDir)\..\tmk_core\protocol\usb_hid\USB_Host_Shield_2.0-tmk\;$(SolutionDir)\..\tmk_core\protocol\usb_hid\;$(SolutionDir)\..\lib\lufa\;$(SolutionDir)\..\quantum\audio\;$(SolutionDir)\..\quantum\process_keycode\;$(SolutionDir)\..\drivers\avr\;$(SolutionDir)\..\lib\chibios\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -134,7 +137,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\..\;$(SolutionDir)\..\quantum\;$(SolutionDir)\..\tmk_core\common\;$(SolutionDir)\..\tmk_core\protocol\usb_hid\USB_Host_Shield_2.0-tmk\;$(SolutionDir)\..\tmk_core\protocol\usb_hid\;$(SolutionDir)\..\lib\lufa\;$(SolutionDir)\..\quantum\audio\;$(SolutionDir)\..\quantum\process_keycode\;$(SolutionDir)\..\drivers\avr\;$(SolutionDir)\..\lib\chibios\;$(SolutionDir)\..\users\garyng\;$(SolutionDir)\..\keyboards\converter\usb_usb\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\users\garyng\;$(SolutionDir)\..\keyboards\converter\usb_usb\;$(SolutionDir)\..\;$(SolutionDir)\..\quantum\;$(SolutionDir)\..\tmk_core\common\;$(SolutionDir)\..\tmk_core\protocol\usb_hid\USB_Host_Shield_2.0-tmk\;$(SolutionDir)\..\tmk_core\protocol\usb_hid\;$(SolutionDir)\..\lib\lufa\;$(SolutionDir)\..\quantum\audio\;$(SolutionDir)\..\quantum\process_keycode\;$(SolutionDir)\..\drivers\avr\;$(SolutionDir)\..\lib\chibios\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
