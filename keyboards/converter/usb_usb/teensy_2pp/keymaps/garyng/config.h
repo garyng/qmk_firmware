@@ -24,5 +24,11 @@
 #endif
 
 #ifdef OLED_DRIVER_ENABLE
+  // https://github.com/qmk/qmk_firmware/blob/bedb72b0bc30db906b436e2fc820a4a6559a7520/keyboards/dekunukem/duckypad/config.h#L50-L55
+  #define OLED_DISPLAY_ADDRESS 0x3C
   #define OLED_DISPLAY_128X64
+  #define OLED_COM_PINS COM_PINS_ALT
+
+  #define OLED_IC OLED_IC_SH1106
+  #define OLED_COLUMN_OFFSET 2
 #endif
