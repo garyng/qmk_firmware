@@ -173,7 +173,7 @@ extern "C"
             }
         }
         matrix_scan_quantum();
-        return 1;
+        return matrix_is_mod;
     }
 
     bool matrix_is_modified(void) {
