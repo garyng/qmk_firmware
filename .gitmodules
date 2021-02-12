@@ -25,3 +25,6 @@
 [submodule "tmk_core/protocol/usb_hid/USB_Host_Shield_2.0-tmk"]
 	path = tmk_core/protocol/usb_hid/USB_Host_Shield_2.0-tmk
 	url = https://github.com/tmk/USB_Host_Shield_2.0
+[submodule "tmk_core/protocol/usb_hid/USB_Host_Shield_2.0-garyng"]
+	path = tmk_core/protocol/usb_hid/USB_Host_Shield_2.0-garyng
+	url = git@github.com:garyng/USB_Host_Shield_2.0.git
