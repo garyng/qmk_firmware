@@ -71,4 +71,4 @@ VPATH += $(TMK_DIR)/$(ARDUINO_DIR)/variants/leonardo
 #    Windows doesn't know difference between common/print.h and arduino/Print.h.
 #    On Linux no problem.
 #    Change file name common/print.h to console.h ?
-VPATH := $(TMK_DIR)/common $(VPATH)
+# VPATH := $(TMK_DIR)/common $(VPATH)
