@@ -64,7 +64,8 @@
                 "${workspaceFolder}/quantum/process_keycode/**",
                 "${workspaceFolder}/drivers/avr/**",
                 "${workspaceFolder}/lib/chibios/**",
-                "${workspaceFolder}/lib/lufa/**"
+                "${workspaceFolder}/lib/lufa/**",
+                "${workspaceFolder}/users/garyng"
             ],
             "defines": [
             ],
