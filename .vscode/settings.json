@@ -19,10 +19,14 @@
         "type_traits": "c",
         "utility": "c",
         "ranges": "c",
-        "*.tcc": "cpp"
+        "*.tcc": "cpp",
+        "vector": "c",
+        "*.rh": "c",
+        "xlocale": "c"
     },
     "[markdown]": {
         "editor.trimAutoWhitespace": false,
         "files.trimTrailingWhitespace": false
-    }
+    },
+    "git.enabled": false
 }

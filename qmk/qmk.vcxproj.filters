@@ -28,6 +28,9 @@
     <Filter Include="Source Files\keymaps\hasu2">
       <UniqueIdentifier>{48bc148c-68cc-4e94-a5a2-a2d76d4224ab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\keymaps\teensy_2pp">
+      <UniqueIdentifier>{fa97a5f9-006d-4523-8aa7-b04375ad6fd0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\keyboards\converter\usb_usb\hasu2\keymaps\garyng\config.h">
@@ -56,6 +59,9 @@
     </ClInclude>
     <ClInclude Include="..\users\garyng\config.h">
       <Filter>Source Files\garyng</Filter>
+    </ClInclude>
+    <ClInclude Include="..\keyboards\converter\usb_usb\teensy_2pp\keymaps\garyng\config.h">
+      <Filter>Source Files\keymaps\teensy_2pp</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -92,6 +98,9 @@
     <ClCompile Include="..\keyboards\converter\usb_usb\hasu\keymaps\garyng\keymap.c">
       <Filter>Source Files\keymaps\hasu</Filter>
     </ClCompile>
+    <ClCompile Include="..\keyboards\converter\usb_usb\teensy_2pp\keymaps\garyng\keymap.c">
+      <Filter>Source Files\keymaps\teensy_2pp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\keyboards\converter\usb_usb\info.json" />
@@ -102,6 +111,9 @@
     </None>
     <None Include="..\keyboards\converter\usb_usb\hasu2\keymaps\garyng\rules.mk">
       <Filter>Source Files\keymaps\hasu2</Filter>
+    </None>
+    <None Include="..\keyboards\converter\usb_usb\teensy_2pp\keymaps\garyng\rules.mk">
+      <Filter>Source Files\keymaps\teensy_2pp</Filter>
     </None>
   </ItemGroup>
 </Project>

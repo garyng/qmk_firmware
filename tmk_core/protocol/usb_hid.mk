@@ -4,7 +4,7 @@ USB_HID_DIR = protocol/usb_hid
 #
 # USB Host Shield
 #
-USB_HOST_SHIELD_DIR = $(USB_HID_DIR)/USB_Host_Shield_2.0-tmk
+USB_HOST_SHIELD_DIR = $(USB_HID_DIR)/USB_Host_Shield_2.0-garyng
 USB_HOST_SHIELD_SRC = \
 	$(USB_HOST_SHIELD_DIR)/Usb.cpp \
 	$(USB_HOST_SHIELD_DIR)/usbhid.cpp \
@@ -71,4 +71,4 @@ VPATH += $(TMK_DIR)/$(ARDUINO_DIR)/variants/leonardo
 #    Windows doesn't know difference between common/print.h and arduino/Print.h.
 #    On Linux no problem.
 #    Change file name common/print.h to console.h ?
-VPATH := $(TMK_DIR)/common $(VPATH)
+# VPATH := $(TMK_DIR)/common $(VPATH)
