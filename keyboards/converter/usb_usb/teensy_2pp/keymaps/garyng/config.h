@@ -31,4 +31,12 @@
 
   #define OLED_IC OLED_IC_SH1106
   #define OLED_COLUMN_OFFSET 2
+
+//   #define OLED_TIMEOUT 1000
+//   #define OLED_SCROLL_TIMEOUT 1000
+#endif
+
+#ifdef ENCODER_ENABLE
+    #define ENCODERS_PAD_A { D2 }
+    #define ENCODERS_PAD_B { D3 }
 #endif
