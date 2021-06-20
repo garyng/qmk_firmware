@@ -92,3 +92,6 @@ GRAPHICS
 # hex files
 *.hex binary
 *.eep binary
+
+# qmk
+/bin/qmk eol=lf
