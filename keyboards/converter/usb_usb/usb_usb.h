@@ -129,7 +129,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     KE1,K1D,K1B,K06,K19,K05,K11,K10,K36,K37,K38,        KE5,      K52,      K59,K5A,K5B,     \
     KE0,KE3,KE2,        K2C,                KE6,KE7,K65,KE4,  K50,K51,K4F,  K62,    K63,K58, \
     KB2, KB4 \
-) LAYOUT_all( \
+) ( \
                   KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,                                                                                \
     K29,          K3A,   K3B,   K3C,   K3D,   K3E,   K3F,   K40,   K41,   K42,   K43,   K44,   K45,             K46,   K47,   K48,      KC_NO, KC_NO, KC_NO, KC_NO,    KC_NO,        \
     K35,   K1E,   K1F,   K20,   K21,   K22,   K23,   K24,   K25,   K26,   K27,   K2D,   K2E,   KC_NO, K2A,      K49,   K4A,   K4B,      K53,   K54,   K55,   K56,      KC_NO, KC_NO, \
@@ -163,7 +163,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     KE1,K64,K1D,K1B,K06,K19,K05,K11,K10,K36,K37,K38,    KE5,      K52,      K59,K5A,K5B,K58, \
     KE0,KE3,KE2,        K2C,                KE6,KE7,K65,KE4,  K50,K51,K4F,  K62,    K63,     \
     KB2, KB4 \
-) LAYOUT_all( \
+) ( \
                   KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,                                                                                \
     K29,          K3A,   K3B,   K3C,   K3D,   K3E,   K3F,   K40,   K41,   K42,   K43,   K44,   K45,             K46,   K47,   K48,      KC_NO, KC_NO, KC_NO, KC_NO,    KC_NO,        \
     K35,   K1E,   K1F,   K20,   K21,   K22,   K23,   K24,   K25,   K26,   K27,   K2D,   K2E,   KC_NO, K2A,      K49,   K4A,   K4B,      K53,   K54,   K55,   K56,      KC_NO, KC_NO, \
@@ -197,7 +197,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     KE1,K1D,K1B,K06,K19,K05,K11,K10,K36,K37,K38,        K87,KE5,      K52,      K59,K5A,K5B,K58, \
     KE0,KE3,KE2,K8B,    K2C,        K8A,K88,KE6,KE7,K65,KE4,      K50,K51,K4F,  K62,    K63,     \
     KB2, KB4 \
-) LAYOUT_all( \
+) ( \
                   KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,    \
     K29,          K3A,   K3B,   K3C,   K3D,   K3E,   K3F,   K40,   K41,   K42,   K43,   K44,   K45,             K46,   K47,   K48,      KC_NO, KC_NO, KC_NO, KC_NO,    KC_NO,        \
     K35,   K1E,   K1F,   K20,   K21,   K22,   K23,   K24,   K25,   K26,   K27,   K2D,   K2E,   K89,   K2A,      K49,   K4A,   K4B,      K53,   K54,   K55,   K56,      KC_NO, KC_NO, \
