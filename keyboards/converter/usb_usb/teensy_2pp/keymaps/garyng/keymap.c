@@ -142,12 +142,13 @@ void oled_task_user(void) {
     oled_write_ln(str, false);
 }
 
-void encoder_update_user(uint8_t index, bool clockwise) {
+bool encoder_update_user(uint8_t index, bool clockwise) {
     if (clockwise) {
         count++;
     } else {
         count--;
     }
+    return true;
 }
 
 void dip_switch_update_user(uint8_t index, bool active) {

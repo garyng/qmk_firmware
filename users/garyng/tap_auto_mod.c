@@ -1,5 +1,5 @@
-#include "tap_auto_mod.h"
 #include "quantum.h"
+#include "tap_auto_mod.h"
 #include "debug.h"
 #include "action_tapping.h"
 
@@ -94,7 +94,7 @@ void process_tam_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 void matrix_scan_tam_user(void) {
-    if (tam_state.count > 0 && timer_elapsed(tam_state.timer) > get_tapping_term(tam_state.keycode, NULL)) {
+    if (tam_state.count > 0 && timer_elapsed(tam_state.timer) > TAPPING_TERM) {
         tam_finished(&tam_state);
         tam_reset(&tam_state);
     }
