@@ -71,7 +71,7 @@ Take a look at [`HidGenericReportParser.cpp`](https://github.com/garyng/qmk_firm
 
 ### Mapping the keys
 
-By default unrecognized keys are ignored by the USB-USB converter, you need to add them manually and modify your `keymap.c` layout file accordingly. See [40b16f7fca07](https://github.com/garyng/qmk_firmware/commit/40b16f7fca070b2ebec2e4590362ae21f34a9ae3) as an example.
+By default unrecognized keys are ignored by the USB-USB converter, you need to add them manually and modify your `keymap.c` layout file accordingly. See [40b16f7fca07](https://github.com/garyng/qmk_firmware/commit/40b16f7fca070b2ebec2e4590362ae21f34a9ae3) for an example mapping (the keycode is mapped from the report field in the [parser](https://github.com/garyng/qmk_firmware/blob/3179536a20d3f0be5c5fb71827e520c0e5fc7145/keyboards/converter/usb_usb/HidGenericReportParser.cpp#L62-L67)).
 
 ## Using Wrapping Key
 
