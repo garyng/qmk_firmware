@@ -85,16 +85,57 @@ extern "C"
     uint8_t matrix_cols(void) { return MATRIX_COLS; }
     bool matrix_has_ghost(void) { return false; }
 
+    void init_led(int i) {
+        DDRC  |=  (1<<i);
+    }
+
+    void on_led(int i) {
+        PORTC |=  (1<<i);
+    }
+
+    void off_led(int i){
+        PORTC &= ~(1<<i);
+    }
+
+    void toggle_led(int i) {
+        PORTC ^=  (1<<i);
+    }
+
+    void blink_led(int i) {
+        on_led(i);
+        delay(150);
+        off_led(i);
+    }
+
+    void init_leds() {
+        for (int i = 1; i <= 6; i++) {
+            init_led(i);
+            blink_led(i);
+        }
+        // init_led(6);
+        // blink_led(6);
+    }
     void matrix_init(void) {
+        init_leds();
+
         // USB Host Shield setup
-        usb_host.Init();
+        // int8_t ret = usb_host.Init();
+
+        // if (ret == 0) {
+        //     on_led(6);
+        // } else {
+        //     off_led(6);
+        // }
 
         // Initialize keyboard report parsers
         for (int i = 0; i < MAX_KEYBOARDS; ++i) {
             keyboards[i].SetReportParser(&parsers[i]);
         }
+        on_led(1);
 
         matrix_init_quantum();
+
+        on_led(2);
     }
 
     static void or_report(report_keyboard_t report) {
