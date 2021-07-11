@@ -126,7 +126,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),*/
 };
 
-uint8_t count = 0;
+int8_t count = 0;
 
 void oled_task_user(void) {
     // Host Keyboard LED Status
@@ -154,7 +154,10 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 void dip_switch_update_user(uint8_t index, bool active) {
     switch (index) {
         case 0:
-            count = 0;
+            count = -64;
+            break;
+        case 1:
+            count = 64;
             break;
     }
 }

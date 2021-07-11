@@ -37,7 +37,7 @@
 #endif
 
 #ifdef ENCODER_ENABLE
-    #define ENCODERS_PAD_A { D2 }
-    #define ENCODERS_PAD_B { D3 }
-    #define DIP_SWITCH_PINS { D4 }
+    #define ENCODERS_PAD_A { D2, C0 }
+    #define ENCODERS_PAD_B { D3, C1 }
+    #define DIP_SWITCH_PINS { D4, C2 }
 #endif
