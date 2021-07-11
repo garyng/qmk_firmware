@@ -62,8 +62,8 @@ void tap_wk_kc(void) {
     register_code(current_wk);
     register_code16(current_kc);
 
-    unregister_code(current_wk);
     unregister_code16(current_kc);
+    unregister_code(current_wk);
 }
 
 void matrix_scan_wk_user(void) {
