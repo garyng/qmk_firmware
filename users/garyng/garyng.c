@@ -1,9 +1,11 @@
 #include QMK_KEYBOARD_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <print.h>
 #include "tap_auto_mod.h"
 #include "wrapping_key.h"
+#include <debug.h>
 
 __attribute__ ((weak))
 void keyboard_post_init_keymap(void) {}

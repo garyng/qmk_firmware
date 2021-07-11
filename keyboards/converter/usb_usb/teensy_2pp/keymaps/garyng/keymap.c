@@ -19,11 +19,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdio.h>
 #include <stdlib.h>
 #include <print.h>
-#include "tap_auto_mod.h"
 #include "usb_usb.h"
-#include "wrapping_key.h"
 #include "keyboards/converter/usb_usb/config.h"
 #include "users/garyng/config.h"
+#include "tap_auto_mod.h"
+#include "wrapping_key.h"
 
 const uint8_t default_wki = 0;
 
@@ -145,8 +145,10 @@ void oled_task_user(void) {
 bool encoder_update_user(uint8_t index, bool clockwise) {
     if (clockwise) {
         count++;
+        tap_code_with_wk(KC_MS_WH_UP);
     } else {
         count--;
+        tap_code_with_wk(KC_MS_WH_DOWN);
     }
     return true;
 }
