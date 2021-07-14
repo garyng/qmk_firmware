@@ -59,5 +59,6 @@ void oled_task_user(void) {
     oled_write_P(led_state.scroll_lock ? PSTR("SCR ") : PSTR("    "), false);
     oled_write_ln_P(PSTR(""), false);
 
+    wk_render_oled();
     oled_task_keymap();
 }
