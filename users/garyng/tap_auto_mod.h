@@ -23,4 +23,4 @@ void tam_reset(tap_auto_mod_state_t *state);
 void tam_handle_interruption(uint16_t keycode, keyrecord_t *record, tap_auto_mod_state_t *state);
 void process_tam_user(uint16_t keycode, keyrecord_t *record);
 void matrix_scan_tam_user(void);
-void tam_render_oled(void);
+void tam_render_oled_user(void);

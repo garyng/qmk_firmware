@@ -33,6 +33,17 @@ const uint16_t tam_mod_maps[MAX_TAM_TAPS + 1] = {
     [3] = KC_LALT,  // 3 taps
 };
 
+void tam_render_oled_keymap(tap_auto_mod_state_t *state) {
+    switch (state->count + 1) {
+        case 2:
+            oled_write_P(PSTR("CTRL "), false);
+            break;
+        case 3:
+            oled_write_P(PSTR("ALT "), false);
+            break;
+    }
+}
+
 enum WrappingKeysIndexes {
     WKI0 = 0,
     WKI1,
