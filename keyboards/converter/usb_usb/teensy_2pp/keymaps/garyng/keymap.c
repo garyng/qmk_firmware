@@ -34,7 +34,7 @@ const uint16_t tam_mod_maps[MAX_TAM_TAPS + 1] = {
 };
 
 void tam_render_oled_keymap(tap_auto_mod_state_t *state) {
-    switch (state->count + 1) {
+    switch (state->count) {
         case 2:
             oled_write_P(PSTR("CTRL "), false);
             break;
