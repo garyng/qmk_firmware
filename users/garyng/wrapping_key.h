@@ -15,4 +15,4 @@ extern const uint8_t default_wki;
 
 bool process_wk_user(uint16_t keycode, keyrecord_t *record);
 void matrix_scan_wk_user(void);
-void tap_code_with_wk(uint16_t code);
+void wk_tap_code(uint16_t code);
