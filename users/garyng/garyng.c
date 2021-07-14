@@ -60,6 +60,6 @@ void oled_task_user(void) {
     oled_write_ln_P(PSTR(""), false);
 
     tam_render_oled();
-    wk_render_oled();
+    wk_render_oled_user();
     oled_task_keymap();
 }
