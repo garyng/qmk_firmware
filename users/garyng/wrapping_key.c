@@ -109,7 +109,7 @@ void wk_tap_code(uint16_t code) {
     unregister_code(current_wk);
 }
 
-void wk_render_oled_keymap(uint8_t current_wki) {
+__attribute__((weak)) void wk_render_oled_keymap(uint8_t current_wki) {
     oled_write_P(PSTR("WK: "), false);
     oled_write_char('1' + current_wki, false);
     oled_write_ln_P(PSTR(""), false);
