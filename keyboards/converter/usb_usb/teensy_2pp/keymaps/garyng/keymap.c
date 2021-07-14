@@ -49,6 +49,27 @@ const uint16_t wki_to_wk[MAX_WK] = {
     [WKI4] = KC_F17
 };
 
+void wk_render_oled_keymap(uint8_t current_wki) {
+    switch (current_wki) {
+        case WKI0:
+            oled_write_P(PSTR("F13"), false);
+            break;
+        case WKI1:
+            oled_write_P(PSTR("F14"), false);
+            break;
+        case WKI2:
+            oled_write_P(PSTR("F15"), false);
+            break;
+        case WKI3:
+            oled_write_P(PSTR("F16"), false);
+            break;
+        case WKI4:
+            oled_write_P(PSTR("F17"), false);
+            break;
+    }
+    oled_write_P(PSTR(" "), false);
+}
+
 const uint16_t wki_to_kc[MAX_WK] = {
     [WKI0] = KC_BSPC,
     [WKI1] = KC_EQUAL,
