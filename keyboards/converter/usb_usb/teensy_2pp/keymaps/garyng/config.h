@@ -41,3 +41,5 @@
     #define ENCODERS_PAD_B { D3, C1 }
     #define DIP_SWITCH_PINS { D4, C2 }
 #endif
+
+#define DEBUG_MATRIX_SCAN_RATE

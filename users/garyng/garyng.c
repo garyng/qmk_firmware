@@ -52,6 +52,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return process_wk_user(keycode, record);
 }
 
+void render_matrix_scan_rate(void) {
+#ifdef DEBUG_MATRIX_SCAN_RATE
+    char str[10];
+    sprintf(str, "%lu Hz", get_matrix_scan_rate());
+    oled_write_ln_P(PSTR(""), false);
+    oled_write(str, false);
+#endif
+}
+
 void oled_task_user(void) {
     led_t led_state = host_keyboard_led_state();
     oled_write_P(led_state.num_lock ? PSTR("NUM ") : PSTR("    "), false);
@@ -61,5 +70,6 @@ void oled_task_user(void) {
 
     wk_render_oled_user();
     tam_render_oled_user();
+    render_matrix_scan_rate();
     oled_task_keymap();
 }
