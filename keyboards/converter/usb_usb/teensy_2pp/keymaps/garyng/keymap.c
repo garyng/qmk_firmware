@@ -126,6 +126,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),*/
 };
 
+enum Encoders {
+    ENCODER_HORIZONTAL = 0,
+    ENCODER_VERTICAL = 1
+};
+
 int8_t count = 0;
 
 void oled_task_user(void) {
@@ -143,22 +148,25 @@ void oled_task_user(void) {
 }
 
 bool encoder_update_user(uint8_t index, bool clockwise) {
-    if (clockwise) {
-        count++;
-        tap_code_with_wk(KC_MS_WH_UP);
-    } else {
-        count--;
-        tap_code_with_wk(KC_MS_WH_DOWN);
+
+    switch (index) {
+        case ENCODER_HORIZONTAL:
+            wk_tap_code(clockwise ? KC_MS_WH_LEFT : KC_MS_WH_RIGHT);
+            break;
+        case ENCODER_VERTICAL:
+            wk_tap_code(clockwise ? KC_MS_WH_DOWN : KC_MS_WH_UP);
+            break;
     }
+    count += clockwise ? 1 : -1;
     return true;
 }
 
 void dip_switch_update_user(uint8_t index, bool active) {
     switch (index) {
-        case 0:
+        case ENCODER_HORIZONTAL:
             count = -64;
             break;
-        case 1:
+        case ENCODER_VERTICAL:
             count = 64;
             break;
     }
