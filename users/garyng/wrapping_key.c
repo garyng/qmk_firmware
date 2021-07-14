@@ -3,7 +3,6 @@
 #include <oled_driver.h>
 #include <quantum.h>
 #include <timer.h>
-
 #include "tap_auto_mod.h"
 #include "debug.h"
 
@@ -111,7 +110,7 @@ void wk_tap_code(uint16_t code) {
 }
 
 void wk_render_oled(void) {
-    oled_write_P(PSTR("wk: "), false);
+    oled_write_P(PSTR("WK: "), false);
     oled_write_char('1' + current_wki, false);
     oled_write_ln_P(PSTR(""), false);
 }
