@@ -31,6 +31,8 @@
 // PLL_period_ps = 1655; macro_period_vclks = 2304
 #define calcMacroPeriod(vcsel_period_pclks) ((((uint32_t)2304 * (vcsel_period_pclks) * 1655) + 500) / 1000)
 
+#define I2C_TIMEOUT 10
+
 // Constructors ////////////////////////////////////////////////////////////////
 
 VL53L0X::VL53L0X()
@@ -280,75 +282,126 @@ bool VL53L0X::init(bool io_2v8)
 }
 
 // Write an 8-bit register
-void VL53L0X::writeReg(uint8_t reg, uint8_t value) {
-    last_status = i2c_writeReg(address, reg, &value, 1, I2C_TIMEOUT_INFINITE);
+void VL53L0X::writeReg(uint8_t reg, uint8_t value)
+{
+  last_status = i2c_writeReg(address, reg, &value, 1, I2C_TIMEOUT);
+
+ /* bus->beginTransmission(address);
+  bus->write(reg);
+  bus->write(value);
+  last_status = bus->endTransmission();*/
 }
 
 // Write a 16-bit register
-void VL53L0X::writeReg16Bit(uint8_t reg, uint16_t value) {
-    uint8_t values[] = {
-        (value >> 8) & 0xFF,  // value high byte
-        value & 0xFF          // value low byte
-    };
-    last_status = i2c_writeReg(address, reg, values, 2, I2C_TIMEOUT_INFINITE);
+void VL53L0X::writeReg16Bit(uint8_t reg, uint16_t value)
+{
+  uint8_t buffer[2] = {(value >> 8) & 0xFF, value & 0xFF};
+  last_status       = i2c_writeReg(address, reg, buffer, 2, I2C_TIMEOUT);
+
+  //bus->beginTransmission(address);
+  //bus->write(reg);
+  //bus->write((value >> 8) & 0xFF); // value high byte
+  //bus->write( value       & 0xFF); // value low byte
+  //last_status = bus->endTransmission();
 }
 
 // Write a 32-bit register
-void VL53L0X::writeReg32Bit(uint8_t reg, uint32_t value) {
-    uint8_t values[] = {
-        (value >> 24) & 0xFF, // value highest byte
-        (value >> 16) & 0xFF,
-        (value >> 8) & 0xFF,
-        value & 0xFF // value lowest byte
-    };
-    last_status = i2c_writeReg(address, reg, values, 2, I2C_TIMEOUT_INFINITE);
+void VL53L0X::writeReg32Bit(uint8_t reg, uint32_t value)
+{
+  uint8_t buffer[4] = {(value >> 24) & 0xFF, (value >> 16) & 0xFF, (value >> 8) & 0xFF, value & 0xFF};
+  last_status       = i2c_writeReg(address, reg, buffer, 4, I2C_TIMEOUT);
+
+  //bus->beginTransmission(address);
+  //bus->write(reg);
+  //bus->write((value >> 24) & 0xFF); // value highest byte
+  //bus->write((value >> 16) & 0xFF);
+  //bus->write((value >>  8) & 0xFF);
+  //bus->write( value        & 0xFF); // value lowest byte
+  //last_status = bus->endTransmission();
 }
 
 // Read an 8-bit register
-uint8_t VL53L0X::readReg(uint8_t reg) {
-    uint8_t value;
-    last_status = i2c_readReg(address, reg, &value, sizeof(value), I2C_TIMEOUT_INFINITE);
-    return value;
+uint8_t VL53L0X::readReg(uint8_t reg)
+{
+  uint8_t value;
+  last_status = i2c_readReg(address, reg, &value, 1, I2C_TIMEOUT);
+
+  return value;
 }
 
 // Read a 16-bit register
-uint16_t VL53L0X::readReg16Bit(uint8_t reg) {
-    uint8_t values[2];
-    last_status = i2c_readReg(address, reg, values, 2, I2C_TIMEOUT_INFINITE);
+uint16_t VL53L0X::readReg16Bit(uint8_t reg)
+{
+  uint8_t  buffer[2];
+  uint16_t value;
 
-    uint16_t value;
+  last_status = i2c_readReg(address, reg, buffer, 2, I2C_TIMEOUT);
 
-    value = uint16_t(values[0]) << 8; // value high byte
-    value |= values[1];               // value low byte
+  //bus->beginTransmission(address);
+  //bus->write(reg);
+  //last_status = bus->endTransmission();
 
-    return value;
+  // bus->requestFrom(address, (uint8_t)2);
+  value = uint16_t(buffer[0]) << 8; // value high byte
+  value |= buffer[1];               // value low byte
+
+  return value;
 }
 
 // Read a 32-bit register
-uint32_t VL53L0X::readReg32Bit(uint8_t reg) {
-    uint8_t values[3];
-    last_status = i2c_readReg(address, reg, values, 3, I2C_TIMEOUT_INFINITE);
+uint32_t VL53L0X::readReg32Bit(uint8_t reg)
+{
+  uint8_t  buffer[4];
+  uint32_t value;
 
-    uint32_t value;
+  last_status = i2c_readReg(address, reg, buffer, 4, I2C_TIMEOUT);
 
-    value = uint32_t(values[0]) << 24;  // value highest byte
-    value |= uint32_t(values[1]) << 16;
-    value |= uint16_t(values[2]) << 8;
-    value |= values[3];  // value lowest byte
+  //bus->beginTransmission(address);
+  //bus->write(reg);
+  //last_status = bus->endTransmission();
 
-    return value;
+  //bus->requestFrom(address, (uint8_t)4);
+  value  = uint16_t(buffer[0]) << 24; // value highest byte
+  value |= uint16_t(buffer[1]) << 16;
+  value |= uint16_t(buffer[2]) <<  8;
+  value |= buffer[3];       // value lowest byte
+
+  return value;
 }
 
 // Write an arbitrary number of bytes from the given array to the sensor,
 // starting at the given register
-void VL53L0X::writeMulti(uint8_t reg, uint8_t const* src, uint8_t count) {
-    last_status = i2c_writeReg(address, reg, src, count, I2C_TIMEOUT_INFINITE);
+void VL53L0X::writeMulti(uint8_t reg, uint8_t const * src, uint8_t count)
+{
+  last_status = i2c_writeReg(address, reg, src, count, I2C_TIMEOUT);
+
+ /* bus->beginTransmission(address);
+  bus->write(reg);
+
+  while (count-- > 0)
+  {
+    bus->write(*(src++));
+  }
+
+  last_status = bus->endTransmission();*/
 }
 
 // Read an arbitrary number of bytes from the sensor, starting at the given
 // register, into the given array
-void VL53L0X::readMulti(uint8_t reg, uint8_t* dst, uint8_t count) {
-    last_status =  i2c_readReg(address, reg, dst, count, I2C_TIMEOUT_INFINITE);
+void VL53L0X::readMulti(uint8_t reg, uint8_t * dst, uint8_t count)
+{
+  last_status = i2c_readReg(address, reg, dst, count, I2C_TIMEOUT);
+
+  /*bus->beginTransmission(address);
+  bus->write(reg);
+  last_status = bus->endTransmission();
+
+  bus->requestFrom(address, count);
+
+  while (count-- > 0)
+  {
+    *(dst++) = bus->read();
+  }*/
 }
 
 // Set the return signal rate limit check value in units of MCPS (mega counts
