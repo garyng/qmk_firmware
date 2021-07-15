@@ -3,11 +3,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <print.h>
-#include "tap_auto_mod.h"
-#include "wrapping_key.h"
 #include <debug.h>
 #include <host.h>
 #include <oled_driver.h>
+#include "tap_auto_mod.h"
+#include "wrapping_key.h"
 
 __attribute__ ((weak))
 void keyboard_post_init_keymap(void) {}
@@ -21,6 +21,11 @@ bool process_record_keymap(uint16_t keycode, keyrecord_t *record) { return true;
 __attribute__ ((weak))
 void oled_task_keymap(void) {}
 
+__attribute__((weak))
+void garyng2_init(void) {}
+
+__attribute__((weak))
+void garyng2_test(void) {}
 
 void keyboard_post_init_user(void) {
     debug_enable=true;
@@ -29,12 +34,15 @@ void keyboard_post_init_user(void) {
     //debug_mouse=true;
 
     keyboard_post_init_keymap();
+    garyng2_init();
 }
 
 // todo: reset if layer is changed but trackers aren't clear
 // todo: tap dance to RESET
 
 void matrix_scan_user(void) {
+    garyng2_test();
+
     matrix_scan_wk_user();
     matrix_scan_tam_user();
 

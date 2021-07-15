@@ -32,7 +32,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "led.h"
 #include "host.h"
 #include "keyboard.h"
-#include "VL53L0X.h"
 
 extern "C" {
 #include "quantum.h"
@@ -81,8 +80,6 @@ HidGeneric keyboards[MAX_KEYBOARDS] = {HidGeneric(&usb_host), HidGeneric(&usb_ho
 HidGenericReportParser parsers[MAX_KEYBOARDS];
 uint16_t               last_time_stamps[MAX_KEYBOARDS];
 
-VL53L0X sensor;
-
 extern "C"
 {
     uint8_t matrix_rows(void) { return MATRIX_ROWS; }
@@ -123,10 +120,7 @@ extern "C"
         init_leds();
 
         // USB Host Shield setup
-        usb_host.Init();
-
-        uint8_t ret = sensor.init();
-        sensor.startContinuous();
+        int8_t ret = usb_host.Init();
 
         if (ret == 0) {
             on_led(6);
@@ -218,7 +212,6 @@ extern "C"
             }
         }
         matrix_scan_quantum();
-        dprintf("sensor: %d mm", sensor.readRangeContinuousMillimeters());
         return matrix_is_mod;
     }
 
