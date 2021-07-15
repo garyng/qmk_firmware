@@ -23,6 +23,10 @@
 #define PRODUCT Gary U2U Converter
 #endif
 
+#ifdef WK_TIMEOUT
+#undef WK_TIMEOUT
+#endif
+
 #ifdef OLED_DRIVER_ENABLE
   // https://github.com/qmk/qmk_firmware/blob/bedb72b0bc30db906b436e2fc820a4a6559a7520/keyboards/dekunukem/duckypad/config.h#L50-L55
   #define OLED_DISPLAY_ADDRESS 0x3C
@@ -42,4 +46,4 @@
     #define DIP_SWITCH_PINS { D4, C2 }
 #endif
 
-#define DEBUG_MATRIX_SCAN_RATE
+// #define DEBUG_MATRIX_SCAN_RATE
