@@ -1,8 +1,7 @@
 #ifndef VL53L0X_h
 #define VL53L0X_h
 
-#include <Arduino.h>
-#include <Wire.h>
+#include "i2c_master.h"
 
 class VL53L0X
 {
@@ -99,9 +98,6 @@ class VL53L0X
 
     VL53L0X();
 
-    void setBus(TwoWire * bus) { this->bus = bus; }
-    TwoWire * getBus() { return bus; }
-
     void setAddress(uint8_t new_addr);
     inline uint8_t getAddress() { return address; }
 
@@ -142,7 +138,7 @@ class VL53L0X
 
     struct SequenceStepEnables
     {
-      boolean tcc, msrc, dss, pre_range, final_range;
+      bool tcc, msrc, dss, pre_range, final_range;
     };
 
     struct SequenceStepTimeouts
@@ -153,7 +149,6 @@ class VL53L0X
       uint32_t msrc_dss_tcc_us,    pre_range_us,    final_range_us;
     };
 
-    TwoWire * bus;
     uint8_t address;
     uint16_t io_timeout;
     bool did_timeout;
