@@ -1,6 +1,8 @@
 #include QMK_KEYBOARD_H
 #include <debug.h>
 
+#include "VL53L0X.h"
+
 extern "C" {
 
 #include "i2c_master.h"
@@ -66,6 +68,8 @@ void RAP_Write(uint8_t address, uint8_t data) {
 }
  */
 
+VL53L0X _sensor;
+
 void garyng2_init(void) {
     DDRC |= (1 << 5);
     DDRC |= (1 << 6);
@@ -73,19 +77,21 @@ void garyng2_init(void) {
 
     PORTC |= (1 << 5);
 
-    i2c_writeReg(_address, _reg, NULL, 0, 10);
-    i2c_readReg(_address, _reg, &_ret2, 1, 10);
-    i2c_stop();
+    //i2c_writeReg(_address, _reg, NULL, 0, 10);
+    // i2c_readReg(_address, _reg, &_ret2, 1, 10);
+    //i2c_stop();
+
+    _ret2 = _sensor.init();
 
     PORTC |= (1 << 7);
-    //_sensor.startContinuous();
+    _sensor.startContinuous();
 }
 
 void garyng2_test(void) {
-    //uint8_t mm = _sensor.readRangeContinuousMillimeters();
-    //dprintf("last status: %d, mm: %d", _sensor.last_status, mm);
+    uint16_t mm = _sensor.readRangeContinuousMillimeters();
+    dprintf("ret: %d, last status: %d, mm: %u\n", _ret2, _sensor.last_status, mm);
     //dprintf("last status: %d, ret: %X\n", _sensor.last_status, _ret2);
-    dprintf("ret2: 0x%X\n", _ret2);
+    //dprintf("ret2: %d\n", _ret2);
 }
 
 }
