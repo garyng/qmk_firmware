@@ -34,14 +34,8 @@ const uint16_t tam_mod_maps[MAX_TAM_TAPS + 1] = {
 };
 
 void tam_render_oled_keymap(tap_auto_mod_state_t *state) {
-    switch (state->count) {
-        case 2:
-            oled_write_P(PSTR("CTRL "), false);
-            break;
-        case 3:
-            oled_write_P(PSTR("ALT "), false);
-            break;
-    }
+    oled_write_P(state->count == 2 ? PSTR("CTRL ") : PSTR("     "), false);
+    oled_write_P(state->count == 3 ? PSTR("ALT ") : PSTR("    "), false);
 }
 
 enum WrappingKeysIndexes {
