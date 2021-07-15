@@ -8,7 +8,7 @@
 
 // Defines /////////////////////////////////////////////////////////////////////
 
-// Bit shifting is required for i2c_master
+// Bit shifting is required for i2c_master, but Wire does this automatically
 #define ADDRESS_DEFAULT 0b0101001 << 1
 
 // Record the current time to check an upcoming timeout against
@@ -285,11 +285,6 @@ bool VL53L0X::init(bool io_2v8)
 void VL53L0X::writeReg(uint8_t reg, uint8_t value)
 {
   last_status = i2c_writeReg(address, reg, &value, 1, I2C_TIMEOUT);
-
- /* bus->beginTransmission(address);
-  bus->write(reg);
-  bus->write(value);
-  last_status = bus->endTransmission();*/
 }
 
 // Write a 16-bit register
@@ -297,12 +292,6 @@ void VL53L0X::writeReg16Bit(uint8_t reg, uint16_t value)
 {
   uint8_t buffer[2] = {(value >> 8) & 0xFF, value & 0xFF};
   last_status       = i2c_writeReg(address, reg, buffer, 2, I2C_TIMEOUT);
-
-  //bus->beginTransmission(address);
-  //bus->write(reg);
-  //bus->write((value >> 8) & 0xFF); // value high byte
-  //bus->write( value       & 0xFF); // value low byte
-  //last_status = bus->endTransmission();
 }
 
 // Write a 32-bit register
@@ -310,14 +299,6 @@ void VL53L0X::writeReg32Bit(uint8_t reg, uint32_t value)
 {
   uint8_t buffer[4] = {(value >> 24) & 0xFF, (value >> 16) & 0xFF, (value >> 8) & 0xFF, value & 0xFF};
   last_status       = i2c_writeReg(address, reg, buffer, 4, I2C_TIMEOUT);
-
-  //bus->beginTransmission(address);
-  //bus->write(reg);
-  //bus->write((value >> 24) & 0xFF); // value highest byte
-  //bus->write((value >> 16) & 0xFF);
-  //bus->write((value >>  8) & 0xFF);
-  //bus->write( value        & 0xFF); // value lowest byte
-  //last_status = bus->endTransmission();
 }
 
 // Read an 8-bit register
@@ -337,11 +318,6 @@ uint16_t VL53L0X::readReg16Bit(uint8_t reg)
 
   last_status = i2c_readReg(address, reg, buffer, 2, I2C_TIMEOUT);
 
-  //bus->beginTransmission(address);
-  //bus->write(reg);
-  //last_status = bus->endTransmission();
-
-  // bus->requestFrom(address, (uint8_t)2);
   value = uint16_t(buffer[0]) << 8; // value high byte
   value |= buffer[1];               // value low byte
 
@@ -356,11 +332,6 @@ uint32_t VL53L0X::readReg32Bit(uint8_t reg)
 
   last_status = i2c_readReg(address, reg, buffer, 4, I2C_TIMEOUT);
 
-  //bus->beginTransmission(address);
-  //bus->write(reg);
-  //last_status = bus->endTransmission();
-
-  //bus->requestFrom(address, (uint8_t)4);
   value  = uint16_t(buffer[0]) << 24; // value highest byte
   value |= uint16_t(buffer[1]) << 16;
   value |= uint16_t(buffer[2]) <<  8;
@@ -374,16 +345,6 @@ uint32_t VL53L0X::readReg32Bit(uint8_t reg)
 void VL53L0X::writeMulti(uint8_t reg, uint8_t const * src, uint8_t count)
 {
   last_status = i2c_writeReg(address, reg, src, count, I2C_TIMEOUT);
-
- /* bus->beginTransmission(address);
-  bus->write(reg);
-
-  while (count-- > 0)
-  {
-    bus->write(*(src++));
-  }
-
-  last_status = bus->endTransmission();*/
 }
 
 // Read an arbitrary number of bytes from the sensor, starting at the given
@@ -391,17 +352,6 @@ void VL53L0X::writeMulti(uint8_t reg, uint8_t const * src, uint8_t count)
 void VL53L0X::readMulti(uint8_t reg, uint8_t * dst, uint8_t count)
 {
   last_status = i2c_readReg(address, reg, dst, count, I2C_TIMEOUT);
-
-  /*bus->beginTransmission(address);
-  bus->write(reg);
-  last_status = bus->endTransmission();
-
-  bus->requestFrom(address, count);
-
-  while (count-- > 0)
-  {
-    *(dst++) = bus->read();
-  }*/
 }
 
 // Set the return signal rate limit check value in units of MCPS (mega counts
