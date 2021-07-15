@@ -1,7 +1,9 @@
 #ifndef VL53L0X_h
 #define VL53L0X_h
 
+extern "C" {
 #include "i2c_master.h"
+}
 
 class VL53L0X
 {
