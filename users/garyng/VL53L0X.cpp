@@ -4,7 +4,6 @@
 // VL53L0X datasheet.
 
 #include "VL53L0X.h"
-#include <Wire.h>
 
 // Defines /////////////////////////////////////////////////////////////////////
 
@@ -13,10 +12,10 @@
 #define ADDRESS_DEFAULT 0b0101001
 
 // Record the current time to check an upcoming timeout against
-#define startTimeout() (timeout_start_ms = millis())
+#define startTimeout() (timeout_start_ms = timer_read())
 
 // Check if timeout is enabled (set to nonzero value) and has expired
-#define checkTimeoutExpired() (io_timeout > 0 && ((uint16_t)(millis() - timeout_start_ms) > io_timeout))
+#define checkTimeoutExpired() (io_timeout > 0 && (timer_elapsed(timeout_start_ms) > io_timeout))
 
 // Decode VCSEL (vertical cavity surface emitting laser) pulse period in PCLKs
 // from register value
