@@ -32,6 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "led.h"
 #include "host.h"
 #include "keyboard.h"
+
 extern "C" {
 #include "quantum.h"
 }
