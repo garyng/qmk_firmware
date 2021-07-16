@@ -25,14 +25,19 @@ void keyboard_post_init_user(void) {
     // debug_mouse=true;
 
     keyboard_post_init_keymap();
+
+#ifdef DISTANCE_TRIGGER_ENABLE
     dt_init();
+#endif
 }
 
 // todo: reset if layer is changed but trackers aren't clear
 // todo: tap dance to RESET
 
 void matrix_scan_user(void) {
-     dt_get_distance();
+#ifdef DISTANCE_TRIGGER_ENABLE
+    dt_get_distance();
+#endif
 
     matrix_scan_wk_user();
     matrix_scan_tam_user();
@@ -67,11 +72,11 @@ void oled_task_user(void) {
 
     wk_render_oled_user();
     tam_render_oled_user();
-    render_matrix_scan_rate();
+
+    //render_matrix_scan_rate();
+#ifdef DISTANCE_TRIGGER_ENABLE
+    //dt_render_oled_user();
+#endif
     oled_task_keymap();
 }
 
-
-void dt_on_triggered_keymap(void) {
-    dprintln("garyng.c: triggered");
-}

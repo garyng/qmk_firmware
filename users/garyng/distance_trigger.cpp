@@ -1,15 +1,28 @@
+#include "distance_trigger.h"
+
+#include <stdio.h>
+#include <print.h>
 #include <debug.h>
 
-#include "distance_trigger.h"
 #include "VL53L0X.h"
+
+extern "C" {
 #include "quantum.h"
+#include "oled_driver.h"
+}
+
 
 static VL53L0X  _sensor;
 static uint16_t _mm = UINT16_MAX;
 
 extern "C" {
 
-__attribute__((weak)) void dt_on_triggered_keymap(void) {}
+__attribute__((weak)) void dt_on_triggered_keymap(void) {
+    if (!is_oled_on()) {
+        dprintln("triggered: on oled");
+        oled_on();
+    }
+}
 __attribute__((weak)) void dt_on_get_distance_keymap(uint16_t distance_mm) {}
 
 void dt_init(void) {
@@ -20,7 +33,6 @@ void dt_init(void) {
 }
 
 void dt_on_triggered_user(void) {
-    dprintln("triggered!");
     dt_on_triggered_keymap();
 }
 
@@ -36,4 +48,12 @@ void dt_get_distance(void) {
         dt_on_triggered_user();
     }
 }
+
+void dt_render_oled_user(void) {
+    oled_write_ln_P(PSTR(""), false);
+    char str[10];
+    sprintf(str, "%u mm", _mm);
+    oled_write(str, false);
+}
+
 }
