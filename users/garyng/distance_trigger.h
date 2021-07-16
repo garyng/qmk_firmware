@@ -1,7 +1,7 @@
 #pragma once
 
 #ifndef TRIGGER_DISTANCE_MM
-#define TRIGGER_DISTANCE_MM 50
+#define TRIGGER_DISTANCE_MM 70
 #endif
 
 #ifndef VL53L0X_INTERRUPT_PIN

@@ -73,9 +73,9 @@ void oled_task_user(void) {
     wk_render_oled_user();
     tam_render_oled_user();
 
-    //render_matrix_scan_rate();
+    render_matrix_scan_rate();
 #ifdef DISTANCE_TRIGGER_ENABLE
-    //dt_render_oled_user();
+    dt_render_oled_user();
 #endif
     oled_task_keymap();
 }

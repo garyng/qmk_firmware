@@ -26,3 +26,6 @@
 #        define OLED_DISPLAY_128X64
 #    endif
 #endif
+
+#define TRIGGER_DISTANCE_MM 70
+#define VL53L0X_INTERRUPT_PIN D5
