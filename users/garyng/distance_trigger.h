@@ -2,6 +2,7 @@
 
 #define ENABLE_DISTANCE_TRIGGER
 #define TRIGGER_DISTANCE_MM 50
+#define VL53L0X_INTERRUPT_PIN D5
 
 #ifdef __cplusplus
 extern "C" {
