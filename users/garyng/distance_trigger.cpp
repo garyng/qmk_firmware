@@ -39,6 +39,7 @@ void dt_on_triggered_user(void) {
 void dt_get_distance(void) {
     if (readPin(VL53L0X_INTERRUPT_PIN) == 0) {
         // from VL53L0X::readRangeContinuousMillimeters
+        // https://forum.pololu.com/t/fast-vl53l0x-readings/13852/2
         _mm = _sensor.readReg16Bit(_sensor.RESULT_RANGE_STATUS + 10);
         _sensor.writeReg(_sensor.SYSTEM_INTERRUPT_CLEAR, 0x01);
         dt_on_get_distance_keymap(_mm);
