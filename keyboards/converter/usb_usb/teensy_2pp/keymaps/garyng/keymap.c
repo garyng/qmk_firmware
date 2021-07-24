@@ -157,8 +157,6 @@ enum Encoders {
     ENCODER_RIGHT = 1
 };
 
-uint16_t _encoder_modifier = KC_NO;
-
 bool encoder_update_user(uint8_t index, bool clockwise) {
     uint16_t code = KC_NO;
 
@@ -170,26 +168,22 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
             code = clockwise ? KC_MS_WH_UP : KC_MS_WH_DOWN;
             break;
     }
-
-    uint16_t current_wk = get_current_wk();
-    register_code16(current_wk);
-    register_code16(_encoder_modifier);
-    register_code16(code);
-
-    unregister_code16(code);
-    unregister_code16(_encoder_modifier);
-    unregister_code16(current_wk);
-
-    dprintf("mod: %u, code: %u\n", _encoder_modifier, code);
+    wk_tap_code(code);
 
     return true;
 }
 
 void dip_switch_update_user(uint8_t index, bool active) {
+    uint16_t code = KC_NO;
     switch (index) {
         case ENCODER_LEFT:
+            code = active ? KC_MEDIA_PREV_TRACK : KC_NO;
+            break;
         case ENCODER_RIGHT:
-            _encoder_modifier = active ? KC_LCTRL : KC_NO;
+            code = active ? KC_MEDIA_NEXT_TRACK : KC_NO;
             break;
     }
+    wk_tap_code(code);
+
+    // todo: can integrate with tam?
 }
