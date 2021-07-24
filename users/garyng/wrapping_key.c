@@ -59,11 +59,11 @@ void tap_wk_kc(void) {
     uint16_t current_wk = wki_to_wk[current_wki];
     uint16_t current_kc = wki_to_kc[current_wki];
 
-    register_code(current_wk);
+    register_code16(current_wk);
     register_code16(current_kc);
 
     unregister_code16(current_kc);
-    unregister_code(current_wk);
+    unregister_code16(current_wk);
 }
 
 void matrix_scan_wk_user(void) {
@@ -81,7 +81,7 @@ void pre_register_key(tap_auto_mod_state_t *state) {
     uint16_t current_wk = wki_to_wk[current_wki];
 
     if (wk_keys_tracker[current_wki] == 0) {
-        register_code(current_wk);
+        register_code16(current_wk);
     }
     wk_keys_tracker[current_wki]++;
 }
@@ -91,7 +91,7 @@ void post_unregister_key(tap_auto_mod_state_t *state) {
 
     wk_keys_tracker[current_wki]--;
     if (wk_keys_tracker[current_wki] == 0) {
-        unregister_code(current_wk);
+        unregister_code16(current_wk);
     }
 }
 
