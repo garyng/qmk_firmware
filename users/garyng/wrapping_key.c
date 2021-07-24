@@ -95,18 +95,8 @@ void post_unregister_key(tap_auto_mod_state_t *state) {
     }
 }
 
-/**
- * Tap the code with the current wrapping key
- */
-void wk_tap_code(uint16_t code) {
-    // todo: how about tam?
-    uint16_t current_wk = wki_to_wk[current_wki];
-
-    register_code(current_wk);
-    register_code16(code);
-    
-    unregister_code16(code);
-    unregister_code(current_wk);
+uint16_t get_current_wk(void) {
+    return wki_to_wk[current_wki];   
 }
 
 __attribute__((weak)) void wk_render_oled_keymap(uint8_t current_wki) {

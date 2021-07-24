@@ -157,35 +157,39 @@ enum Encoders {
     ENCODER_RIGHT = 1
 };
 
-int8_t count = 0;
-
-void oled_task_keymap(void) {
-    oled_write_ln_P(PSTR(""), false);
-    char str[10];
-    sprintf(str, "%d", count);
-    oled_write_ln(str, false);
-}
+uint16_t _encoder_modifier = KC_NO;
 
 bool encoder_update_user(uint8_t index, bool clockwise) {
+    uint16_t code = KC_NO;
 
     switch (index) {
         case ENCODER_LEFT:
-            wk_tap_code(clockwise ? KC_MS_WH_LEFT : KC_MS_WH_RIGHT);
+            code = clockwise ? KC_MS_WH_LEFT : KC_MS_WH_RIGHT;
             break;
         case ENCODER_RIGHT:
-            wk_tap_code(clockwise ? KC_MS_WH_UP : KC_MS_WH_DOWN);
+            code = clockwise ? KC_MS_WH_UP : KC_MS_WH_DOWN;
             break;
     }
+
+    uint16_t current_wk = get_current_wk();
+    register_code16(current_wk);
+    register_code16(_encoder_modifier);
+    register_code16(code);
+
+    unregister_code16(code);
+    unregister_code16(_encoder_modifier);
+    unregister_code16(current_wk);
+
+    dprintf("mod: %u, code: %u\n", _encoder_modifier, code);
+
     return true;
 }
 
 void dip_switch_update_user(uint8_t index, bool active) {
     switch (index) {
-        case ENCODER_HORIZONTAL:
-            count = -64;
-            break;
-        case ENCODER_VERTICAL:
-            count = 64;
+        case ENCODER_LEFT:
+        case ENCODER_RIGHT:
+            _encoder_modifier = active ? KC_LCTRL : KC_NO;
             break;
     }
 }
