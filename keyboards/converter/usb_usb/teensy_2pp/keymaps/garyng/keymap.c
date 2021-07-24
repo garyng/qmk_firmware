@@ -153,8 +153,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 enum Encoders {
-    ENCODER_HORIZONTAL = 0,
-    ENCODER_VERTICAL = 1
+    ENCODER_LEFT = 0,
+    ENCODER_RIGHT = 1
 };
 
 int8_t count = 0;
@@ -169,14 +169,13 @@ void oled_task_keymap(void) {
 bool encoder_update_user(uint8_t index, bool clockwise) {
 
     switch (index) {
-        case ENCODER_HORIZONTAL:
+        case ENCODER_LEFT:
             wk_tap_code(clockwise ? KC_MS_WH_LEFT : KC_MS_WH_RIGHT);
             break;
-        case ENCODER_VERTICAL:
-            wk_tap_code(clockwise ? KC_MS_WH_DOWN : KC_MS_WH_UP);
+        case ENCODER_RIGHT:
+            wk_tap_code(clockwise ? KC_MS_WH_UP : KC_MS_WH_DOWN);
             break;
     }
-    count += clockwise ? 1 : -1;
     return true;
 }
 
