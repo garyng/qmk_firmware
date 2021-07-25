@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <host.h>
 #include <oled_driver.h>
 #include "tap_auto_mod.h"
@@ -6,12 +7,12 @@
 __attribute__((weak)) void oled_task_keymap(void) {}
 
 void render_matrix_scan_rate(void) {
-//#ifdef DEBUG_MATRIX_SCAN_RATE
+#ifdef DEBUG_MATRIX_SCAN_RATE
     char str[10];
     sprintf(str, "%lu Hz", get_matrix_scan_rate());
     oled_write_ln_P(PSTR(""), false);
     oled_write(str, false);
-//#endif
+#endif
 }
 
 void oled_task_user(void) {
@@ -26,7 +27,7 @@ void oled_task_user(void) {
 
     // render_matrix_scan_rate();
 #    ifdef DISTANCE_TRIGGER_ENABLE
-    // dt_render_oled_user();
+     //dt_render_oled_user();
 #    endif
 
     oled_task_keymap();
