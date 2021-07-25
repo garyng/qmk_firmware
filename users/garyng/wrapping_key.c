@@ -1,6 +1,5 @@
 #include "wrapping_key.h"
 
-#include <oled_driver.h>
 #include <quantum.h>
 #include <timer.h>
 #include "tap_auto_mod.h"
@@ -113,11 +112,7 @@ void wk_tap_code(uint16_t code) {
     unregister_code(current_wk);
 }
 
-__attribute__((weak)) void wk_render_oled_keymap(uint8_t current_wki) {
-    oled_write_P(PSTR("WK: "), false);
-    oled_write_char('1' + current_wki, false);
-    oled_write_ln_P(PSTR(""), false);
-}
+__attribute__((weak)) void wk_render_oled_keymap(uint8_t current_wki) {}
 
 void wk_render_oled_user(void) {
     wk_render_oled_keymap(current_wki);

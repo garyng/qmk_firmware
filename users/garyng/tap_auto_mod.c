@@ -1,9 +1,7 @@
 #include "quantum.h"
 #include "tap_auto_mod.h"
-#include <oled_driver.h>
 #include "debug.h"
 #include "action_tapping.h"
-
 
 #ifndef MAX_TAM_TAPS
 #define MAX_TAM_TAPS 3
@@ -101,11 +99,7 @@ void matrix_scan_tam_user(void) {
     }
 }
 
-__attribute__((weak)) void tam_render_oled_keymap(tap_auto_mod_state_t *state) {
-    oled_write_P(PSTR("TAM: "), false);
-    oled_write_char('0' + tam_state.count, false);
-    oled_write_ln_P(PSTR(""), false);
-}
+__attribute__((weak)) void tam_render_oled_keymap(tap_auto_mod_state_t *state) {}
 
 void tam_render_oled_user(void) {
     tam_render_oled_keymap(&tam_state);
