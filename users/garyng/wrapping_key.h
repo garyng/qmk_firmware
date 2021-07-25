@@ -16,6 +16,7 @@ extern const uint8_t default_wki;
 bool process_wk_user(uint16_t keycode, keyrecord_t *record);
 void matrix_scan_wk_user(void);
 void wk_tap_current(void);
+void set_current_wki(uint8_t wki);
 uint16_t get_current_wk(void);
 void wk_tap_code(uint16_t code);
 void wk_render_oled_user(void);

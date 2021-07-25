@@ -4,9 +4,11 @@
 #include <stdlib.h>
 #include <print.h>
 #include <debug.h>
+#include <eeconfig.h>
 #include <host.h>
 #include "distance_trigger.h"
 #include "tap_auto_mod.h"
+#include "user_config.h"
 #include "wrapping_key.h"
 
 __attribute__((weak)) void keyboard_post_init_keymap(void) {}
@@ -27,6 +29,7 @@ void keyboard_post_init_user(void) {
 #ifdef DISTANCE_TRIGGER_ENABLE
     dt_init();
 #endif
+    read_user_config();
 }
 
 // todo: reset if layer is changed but trackers aren't clear
