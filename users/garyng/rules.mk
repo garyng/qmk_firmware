@@ -11,5 +11,9 @@ ifdef DISTANCE_TRIGGER_ENABLE
         OPT_DEFS += -DDISTANCE_TRIGGER_ENABLE
 		SRC += VL53L0X.cpp distance_trigger.cpp
 		QUANTUM_LIB_SRC += i2c_master.c
-    endif
+	endif
+endif
+
+ifdef OLED_DRIVER_ENABLE
+	SRC += oled.c
 endif
