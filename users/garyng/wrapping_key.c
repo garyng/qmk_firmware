@@ -24,6 +24,20 @@ static uint16_t timeout_timer = 0;
 
 static uint8_t current_wki = 0;
 static uint8_t wk_keys_tracker[MAX_WK];
+static bool    _tapped_current_wk_on_init = false;
+
+void tap_current_wk_on_init(void) {
+    if (_tapped_current_wk_on_init) return;
+
+    // delay a few seconds before tapping the key
+    // immediately tapping it on keyboard_post_init_user and matrix_scan_user
+    // cant guarantee the host will receive it
+    if (timer_read() < 1000) return;
+
+    wk_tap_current();
+    _tapped_current_wk_on_init = true;
+    dprintln("tapped current");
+}
 
 void update_timeout_timer(void) {
 #ifdef WK_TIMEOUT
@@ -54,7 +68,7 @@ bool process_wk_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 
-void tap_wk_kc(void) {
+void wk_tap_current(void) {
     uint16_t current_wk = wki_to_wk[current_wki];
     uint16_t current_kc = wki_to_kc[current_wki];
 
@@ -66,6 +80,7 @@ void tap_wk_kc(void) {
 }
 
 void matrix_scan_wk_user(void) {
+    tap_current_wk_on_init();
 #ifdef WK_TIMEOUT
     if (current_wki != default_wki && timer_elapsed(timeout_timer) > WK_TIMEOUT) {
         dprintf("wki reset to %d", default_wki);
