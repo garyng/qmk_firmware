@@ -112,7 +112,6 @@ void wk_tap_code(uint16_t code) {
     unregister_code(current_wk);
 }
 
-
 __attribute__((weak)) void wk_render_oled_default_impl(uint8_t current_wki) {
     // default implementation is in oled.c
 }

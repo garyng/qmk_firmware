@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <host.h>
 #include <oled_driver.h>
+
+#include "distance_trigger.h"
 #include "tap_auto_mod.h"
 #include "wrapping_key.h"
 
@@ -25,10 +27,10 @@ void oled_task_user(void) {
     wk_render_oled_user();
     tam_render_oled_user();
 
-    // render_matrix_scan_rate();
-#    ifdef DISTANCE_TRIGGER_ENABLE
-     //dt_render_oled_user();
-#    endif
+    render_matrix_scan_rate();
+#ifdef DISTANCE_TRIGGER_ENABLE
+    //dt_render_oled_user();
+#endif
 
     oled_task_keymap();
 }
