@@ -132,6 +132,10 @@ uint16_t get_current_wk(void) {
     return wki_to_wk[current_wki];   
 }
 
+void set_current_wki(uint8_t wki) {
+    current_wki = wki;
+}
+
 /**
  * Tap the code with the current wrapping key
  */
