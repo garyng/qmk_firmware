@@ -99,7 +99,13 @@ void matrix_scan_tam_user(void) {
     }
 }
 
-__attribute__((weak)) void tam_render_oled_keymap(tap_auto_mod_state_t *state) {}
+__attribute__((weak)) void tam_render_oled_default_impl(tap_auto_mod_state_t *state) {
+    // default implementation is in oled.c
+}
+
+__attribute__((weak)) void tam_render_oled_keymap(tap_auto_mod_state_t *state) {
+    tam_render_oled_default_impl(state);
+}
 
 void tam_render_oled_user(void) {
     tam_render_oled_keymap(&tam_state);

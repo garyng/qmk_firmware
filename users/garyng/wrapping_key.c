@@ -114,7 +114,7 @@ void wk_tap_code(uint16_t code) {
 
 
 __attribute__((weak)) void wk_render_oled_default_impl(uint8_t current_wki) {
-    // default implementation is separated into oled.c
+    // default implementation is in oled.c
 }
 
 __attribute__((weak)) void wk_render_oled_keymap(uint8_t current_wki) {

@@ -23,14 +23,13 @@ void oled_task_user(void) {
     oled_task_keymap();
 }
 
-
 void wk_render_oled_default_impl(uint8_t current_wki) {
     oled_write_P(PSTR("WK: "), false);
     oled_write_char('1' + current_wki, false);
     oled_write_ln_P(PSTR(""), false);
 }
 
-void tam_render_oled_keymap(tap_auto_mod_state_t *state) {
+void tam_render_oled_default_impl(tap_auto_mod_state_t *state) {
     oled_write_P(PSTR("TAM: "), false);
     oled_write_char('0' + state->count, false);
     oled_write_ln_P(PSTR(""), false);
