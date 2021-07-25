@@ -51,13 +51,3 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     dprintf("keycode: 0x%02X\n", keycode);
     return process_wk_user(keycode, record);
 }
-
-void render_matrix_scan_rate(void) {
-#ifdef DEBUG_MATRIX_SCAN_RATE
-    char str[10];
-    sprintf(str, "%lu Hz", get_matrix_scan_rate());
-    oled_write_ln_P(PSTR(""), false);
-    oled_write(str, false);
-#endif
-}
-
