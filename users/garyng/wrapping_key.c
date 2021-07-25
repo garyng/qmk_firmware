@@ -100,14 +100,14 @@ void wk_tap_current(void) {
 
 void matrix_scan_wk_user(void) {
     tap_current_wk_on_init();
-#ifdef WK_TIMEOUT
+ #ifdef WK_TIMEOUT
     if (current_wki != default_wki && timer_elapsed(timeout_timer) > WK_TIMEOUT) {
         dprintf("wki reset to %d", default_wki);
-        current_wki   = default_wki;
+        current_wki = default_wki;
         timeout_timer = 0;
-        tap_wk_kc();
+        wk_tap_current();
     }
-#endif
+ #endif
 }
 
 void pre_register_key(tap_auto_mod_state_t *state) {
