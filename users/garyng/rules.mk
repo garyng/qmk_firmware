@@ -17,3 +17,10 @@ endif
 ifdef OLED_DRIVER_ENABLE
 	SRC += oled.c
 endif
+
+DEBUG_LED_ENABLE ?= no
+ifdef DEBUG_LED_ENABLE
+    ifeq ($(strip $(DEBUG_LED_ENABLE)), yes)
+        OPT_DEFS += -DDEBUG_LED_ENABLE
+	endif
+endif

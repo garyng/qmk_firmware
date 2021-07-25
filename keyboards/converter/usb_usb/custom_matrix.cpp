@@ -102,31 +102,20 @@ extern "C"
         PORTD ^=  (1<<i);
     }
 
-    // void blink_led(int i) {
-    //     on_led(i);
-    //     delay(150);
-    //     off_led(i);
-    // }
-
-    void init_leds() {
-        // for (int i = 1; i <= 6; i++) {
-        //     init_led(i);
-        //     blink_led(i);
-        // }
-        init_led(6);
-        // blink_led(6);
-    }
     void matrix_init(void) {
-        init_leds();
 
         // USB Host Shield setup
         int8_t ret = usb_host.Init();
+
+#ifdef DEBUG_LED_ENABLE
+        init_led(6);
 
         if (ret == 0) {
             on_led(6);
         } else {
             off_led(6);
         }
+#endif
 
         // Initialize keyboard report parsers
         for (int i = 0; i < MAX_KEYBOARDS; ++i) {
