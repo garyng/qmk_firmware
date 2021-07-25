@@ -8,6 +8,7 @@
 #include <host.h>
 #include "distance_trigger.h"
 #include "tap_auto_mod.h"
+#include "user_config.h"
 #include "wrapping_key.h"
 
 __attribute__((weak)) void keyboard_post_init_keymap(void) {}
@@ -16,24 +17,6 @@ __attribute__((weak)) void matrix_scan_keymap(void) {}
 
 __attribute__((weak)) bool process_record_keymap(uint16_t keycode, keyrecord_t *record) { return true; }
 
-typedef union {
-    uint32_t raw;
-    struct {
-        uint8_t current_wki;
-    };
-} user_config_t;
-
-user_config_t user_config;
-
-void read_user_config(void) {
-    user_config.raw = eeconfig_read_user();
-    set_current_wki(user_config.current_wki);
-}
-
-void wk_on_changed_user(uint8_t old_wki, uint16_t old_wk, uint8_t new_wki, uint16_t new_wk) {
-    user_config.current_wki = new_wki;
-    eeconfig_update_user(user_config.raw);
-}
 
 void keyboard_post_init_user(void) {
     debug_enable = true;
