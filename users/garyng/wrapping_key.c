@@ -112,7 +112,14 @@ void wk_tap_code(uint16_t code) {
     unregister_code(current_wk);
 }
 
-__attribute__((weak)) void wk_render_oled_keymap(uint8_t current_wki) {}
+
+__attribute__((weak)) void wk_render_oled_default_impl(uint8_t current_wki) {
+    // default implementation is separated into oled.c
+}
+
+__attribute__((weak)) void wk_render_oled_keymap(uint8_t current_wki) {
+    wk_render_oled_default_impl(current_wki);
+}
 
 void wk_render_oled_user(void) {
     wk_render_oled_keymap(current_wki);
