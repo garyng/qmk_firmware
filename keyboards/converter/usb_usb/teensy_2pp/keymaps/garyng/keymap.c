@@ -177,13 +177,15 @@ void dip_switch_update_user(uint8_t index, bool active) {
     uint16_t code = KC_NO;
     switch (index) {
         case ENCODER_LEFT:
-            code = active ? KC_MEDIA_PREV_TRACK : KC_NO;
+            code = KC_INT1;
             break;
         case ENCODER_RIGHT:
-            code = active ? KC_MEDIA_NEXT_TRACK : KC_NO;
+            code = KC_INT2;
             break;
     }
-    wk_tap_code(code);
-
-    // todo: can integrate with tam?
+    if (code != KC_NO) {
+        keyrecord_t record;
+        record.event.pressed = active;
+        process_wk_user(code, &record);   
+    }
 }
