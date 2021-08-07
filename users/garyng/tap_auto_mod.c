@@ -3,12 +3,11 @@
 #include "debug.h"
 #include "action_tapping.h"
 
-
 #ifndef MAX_TAM_TAPS
 #define MAX_TAM_TAPS 3
 const uint16_t tam_mod_maps[MAX_TAM_TAPS + 1] = {
-    [2] = KC_LCTL,  // 2 taps
-    [3] = KC_LALT,  // 3 taps
+    [2] = KC_LCTL, // 2 taps
+    [3] = KC_LALT, // 3 taps
 };
 #endif
 
@@ -98,4 +97,16 @@ void matrix_scan_tam_user(void) {
         tam_finished(&tam_state);
         tam_reset(&tam_state);
     }
+}
+
+__attribute__((weak)) void tam_render_oled_default_impl(tap_auto_mod_state_t *state) {
+    // default implementation is in oled.c
+}
+
+__attribute__((weak)) void tam_render_oled_keymap(tap_auto_mod_state_t *state) {
+    tam_render_oled_default_impl(state);
+}
+
+void tam_render_oled_user(void) {
+    tam_render_oled_keymap(&tam_state);
 }

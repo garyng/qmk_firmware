@@ -19,11 +19,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdio.h>
 #include <stdlib.h>
 #include <print.h>
-#include "tap_auto_mod.h"
 #include "usb_usb.h"
-#include "wrapping_key.h"
 #include "keyboards/converter/usb_usb/config.h"
 #include "users/garyng/config.h"
+#include "tap_auto_mod.h"
+#include "wrapping_key.h"
+#include "oled_driver.h"
 
 const uint8_t default_wki = 0;
 
@@ -31,6 +32,11 @@ const uint16_t tam_mod_maps[MAX_TAM_TAPS + 1] = {
     [2] = KC_LCTL,  // 2 taps
     [3] = KC_LALT,  // 3 taps
 };
+
+void tam_render_oled_keymap(tap_auto_mod_state_t *state) {
+    oled_write_P(state->count == 2 ? PSTR("CTRL ") : PSTR("     "), false);
+    oled_write_P(state->count == 3 ? PSTR("ALT ") : PSTR("    "), false);
+}
 
 enum WrappingKeysIndexes {
     WKI0 = 0,
@@ -47,6 +53,26 @@ const uint16_t wki_to_wk[MAX_WK] = {
     [WKI3] = KC_F16,
     [WKI4] = KC_F17
 };
+
+void wk_render_oled_keymap(uint8_t current_wki) {
+    switch (current_wki) {
+        case WKI0:
+            oled_write_P(PSTR("F13 "), false);
+            break;
+        case WKI1:
+            oled_write_P(PSTR("F14 "), false);
+            break;
+        case WKI2:
+            oled_write_P(PSTR("F15 "), false);
+            break;
+        case WKI3:
+            oled_write_P(PSTR("F16 "), false);
+            break;
+        case WKI4:
+            oled_write_P(PSTR("F17 "), false);
+            break;
+    }
+}
 
 const uint16_t wki_to_kc[MAX_WK] = {
     [WKI0] = KC_BSPC,
@@ -111,7 +137,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_CAPS, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,   KC_H,   KC_J,   KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_NUHS, KC_ENT,                                    KC_P4,   KC_P5,   KC_P6,   KC_PCMM,    KC_SLCT, KC_COPY,
     KC_LSFT, KC_NUBS, KC_Z,    KC_X,    KC_C,    KC_V,   KC_B,   KC_N,   KC_M,    KC_COMM, KC_DOT,  KC_SLSH,          KC_RO,   KC_RSFT,              KC_UP,               KC_P1,   KC_P2,   KC_P3,   KC_PEQL,    KC_EXEC, KC_PSTE,
     KC_LCTL, KC_LGUI, KC_LALT, KC_MHEN, KC_HANJ,         KC_SPC,         KC_HAEN, KC_HENK, KC_KANA, KC_RALT, KC_RGUI, KC_APP,  KC_RCTL,     KC_LEFT, KC_DOWN, KC_RGHT,    KC_P0,            KC_PDOT, KC_PENT,    KC_FIND, KC_CUT,
-    // media keys
+    // map media keys to key 8 and 9
     KC_9,    KC_8
     ),
     /*[LAYER1] = LAYOUT_all(
@@ -126,35 +152,40 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),*/
 };
 
-uint8_t count = 0;
-
-void oled_task_user(void) {
-    // Host Keyboard LED Status
-    led_t led_state = host_keyboard_led_state();
-    oled_write_P(led_state.num_lock ? PSTR("NUM ") : PSTR("    "), false);
-    oled_write_P(led_state.caps_lock ? PSTR("CAP ") : PSTR("    "), false);
-    oled_write_P(led_state.scroll_lock ? PSTR("SCR ") : PSTR("    "), false);
-
-    oled_write_ln_P(PSTR(""), false);
-
-    char str[10];
-    sprintf(str, "%d", count);
-    oled_write_ln(str, false);
-}
+enum Encoders {
+    ENCODER_LEFT = 0,
+    ENCODER_RIGHT = 1
+};
 
 bool encoder_update_user(uint8_t index, bool clockwise) {
-    if (clockwise) {
-        count++;
-    } else {
-        count--;
+    uint16_t code = KC_NO;
+
+    switch (index) {
+        case ENCODER_LEFT:
+            code = clockwise ? KC_MS_WH_LEFT : KC_MS_WH_RIGHT;
+            break;
+        case ENCODER_RIGHT:
+            code = clockwise ? KC_MS_WH_UP : KC_MS_WH_DOWN;
+            break;
     }
+    wk_tap_code(code);
+
     return true;
 }
 
 void dip_switch_update_user(uint8_t index, bool active) {
+    uint16_t code = KC_NO;
     switch (index) {
-        case 0:
-            count = 0;
+        case ENCODER_LEFT:
+            code = KC_INT1;
             break;
+        case ENCODER_RIGHT:
+            code = KC_INT2;
+            break;
+    }
+    if (code != KC_NO) {
+        keyrecord_t record;
+        record.event.pressed = active;
+        process_wk_user(code, &record);   
     }
 }

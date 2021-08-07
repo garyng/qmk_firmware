@@ -32,6 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "led.h"
 #include "host.h"
 #include "keyboard.h"
+
 extern "C" {
 #include "quantum.h"
 }
@@ -85,9 +86,36 @@ extern "C"
     uint8_t matrix_cols(void) { return MATRIX_COLS; }
     bool matrix_has_ghost(void) { return false; }
 
+    void init_led(int i) {
+        DDRD  |=  (1<<i);
+    }
+
+    void on_led(int i) {
+        PORTD |=  (1<<i);
+    }
+
+    void off_led(int i){
+        PORTD &= ~(1<<i);
+    }
+
+    void toggle_led(int i) {
+        PORTD ^=  (1<<i);
+    }
+
     void matrix_init(void) {
+
         // USB Host Shield setup
-        usb_host.Init();
+        int8_t ret = usb_host.Init();
+
+#ifdef DEBUG_LED_ENABLE
+        init_led(6);
+
+        if (ret == 0) {
+            on_led(6);
+        } else {
+            off_led(6);
+        }
+#endif
 
         // Initialize keyboard report parsers
         for (int i = 0; i < MAX_KEYBOARDS; ++i) {
