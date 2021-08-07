@@ -177,10 +177,10 @@ void dip_switch_update_user(uint8_t index, bool active) {
     uint16_t code = KC_NO;
     switch (index) {
         case ENCODER_LEFT:
-            code = KC_MEDIA_PREV_TRACK;
+            code = KC_INT1;
             break;
         case ENCODER_RIGHT:
-            code = KC_MEDIA_NEXT_TRACK;
+            code = KC_INT2;
             break;
     }
     if (code != KC_NO) {
