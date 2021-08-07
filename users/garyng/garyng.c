@@ -18,16 +18,6 @@ __attribute__((weak)) void matrix_scan_keymap(void) {}
 __attribute__((weak)) bool process_record_keymap(uint16_t keycode, keyrecord_t *record) { return true; }
 
 
-/**
- * Callback for oled.c when wk is changed
- */
-__attribute__((weak)) void wk_on_changed_user_oled(uint8_t old_wki, uint16_t old_wk, uint8_t new_wki, uint16_t new_wk) {}
-
-/**
- * Callback for user_config.c when wk is changed
- */
-__attribute__((weak)) void wk_on_changed_user_config(uint8_t old_wki, uint16_t old_wk, uint8_t new_wki, uint16_t new_wk) {}
-
 void keyboard_post_init_user(void) {
     debug_enable = true;
     // debug_matrix=true;
@@ -63,9 +53,4 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     dprintf("keycode: 0x%02X\n", keycode);
     return process_wk_user(keycode, record);
-}
-
-void wk_on_changed_user(uint8_t old_wki, uint16_t old_wk, uint8_t new_wki, uint16_t new_wk) {
-    wk_on_changed_user_oled(old_wki, old_wk, new_wki, new_wk);
-    wk_on_changed_user_config(old_wki, old_wk, new_wki, new_wk);
 }
