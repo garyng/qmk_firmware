@@ -21,7 +21,7 @@ void read_user_config(void) {
 }
 
 #ifndef WK_TIMEOUT
-void wk_on_changed_user(uint8_t old_wki, uint16_t old_wk, uint8_t new_wki, uint16_t new_wk) {
+void wk_on_changed_user_config(uint8_t old_wki, uint16_t old_wk, uint8_t new_wki, uint16_t new_wk) {
     user_config.current_wki = new_wki;
     eeconfig_update_user(user_config.raw);
 }

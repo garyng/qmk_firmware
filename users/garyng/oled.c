@@ -46,3 +46,8 @@ void tam_render_oled_default_impl(tap_auto_mod_state_t *state) {
     oled_write_char('0' + state->count, false);
     oled_write_ln_P(PSTR(""), false);
 }
+
+void wk_on_changed_user_oled(uint8_t old_wki, uint16_t old_wk, uint8_t new_wki, uint16_t new_wk) {
+    // turn on oled whenever wk is changed
+    oled_on();
+}
